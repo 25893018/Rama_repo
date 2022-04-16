@@ -7,7 +7,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git branch: 'main', credentialsId: 'Javapipelinedemo', url: 'https://github.com/25893018/GIT_RAMA.git'
+                git credentialsId: 'Javapipelinedemo', url: 'https://github.com/25893018/Rama_repo.git'
             }
         }
         stage("Maven Build"){
@@ -18,13 +18,13 @@ pipeline{
         }
         stage("deploy-dev"){
             steps{
-                sshagent(['13643b63-8e23-41ac-a381-334727d6ebd3']) {
+                sshagent(['tomcat-new']) {
                 sh """
-                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@10.0.0.173:/home/ec2-user/apache-tomcat-9.0.62/webapps/
+                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@10.0.0.67:/home/ec2-user/apache-tomcat-9.0.62/webapps/
                     
-                    ssh ec2-user@10.0.0.173 /home/ec2-user/apache-tomcat-9.0.62/bin/shutdown.sh
+                    ssh ec2-user@10.0.0.67 /home/ec2-user/apache-tomcat-9.0.62/bin/shutdown.sh
                     
-                    ssh ec2-user@10.0.0.173 /home/ec2-user/apache-tomcat-9.0.62/bin/startup.sh
+                    ssh ec2-user@10.0.0.67 /home/ec2-user/apache-tomcat-9.0.62/bin/startup.sh
                 
                 """
             }
