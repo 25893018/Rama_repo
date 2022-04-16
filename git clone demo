@@ -1,9 +1,10 @@
 pipeline{
     agent any
     stages{
-        stage("Git Checkout"){
+        stage("Git"){
             steps{
-                git 'https://github.com/25893018/Rama_repo.git'
+               git credentialsId: 'Git', url: 'https://github.com/25893018/Rama_repo.git'
             }
         }
+   }
 }
