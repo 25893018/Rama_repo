@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage("Git Checkout"){
             steps{
-                git credentialsId: 'Javapipelinedemo', url: 'https://github.com/25893018/Rama_repo.git'
+                git 'https://github.com/25893018/Rama_repo.git'
             }
         }
 }
