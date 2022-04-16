@@ -1,0 +1,13 @@
+pipeline{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'Javapipelinedemo', url: 'https://github.com/25893018/Rama_repo.git'
+            }
+        }
+}
