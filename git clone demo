@@ -3,7 +3,7 @@ pipeline{
     stages{
         stage("git"){
             steps{
-               git credentialsId: 'Git-credintials', url: 'https://github.com/25893018/Rama_repo.git'
+               git credentialsId: 'Key-cred', url: 'https://github.com/25893018/Rama_repo.git'
             }
         }
    }
