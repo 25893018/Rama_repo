@@ -1,3 +1,100 @@
 
 https://komodor.com/learn/how-to-fix-createcontainerconfigerror-and-createcontainer-errors/
 
+
+ConfigMap is missing—a ConfigMap stores configuration data as key-value pairs.	Identify the missing ConfigMap and create it in the namespace, or mount another, existing ConfigMap.
+Secret is missing—a Secret is used to store sensitive information such as credentials.	Identify the missing Secret and create it in the namespace, or mount another, existing Secret.
+
+commands:
+kubectl get pods
+kubectl describe pod [name] 
+kubectl describe pod [name] /tmp/troubleshooting_describe_pod.txt
+kubectl get configmap configmap name
+kubectl get secret
+kubectl get nodes --show-labels
+kubectl cluster-info
+kubectl get nodes
+
+
+NODE TYPE COMPONENT WHERE TO FIND LOGS
+Master API Server	 /var/log/kube-apiserver.log
+Master Scheduler /var/log/kube-scheduler.log
+Master Controller Manager	 /var/log/kube-controller-manager.log
+
+Worker Kubelet /var/log/kubelet.log
+Worker Kube Proxy	 /var/log/kube-proxy.log
+
+1. What are the features of Kubernetes?
+==================================
+The features of Kubernetes, are as follows:
+
+automated schduling:- k8's provides advanced schdular to launch container on cluster nodes.
+self healing capabilites:- reschduling, replacing and restarting the containers which are died.
+Automated rollouts and rollback:- k8's support rollout and rollback for the desigerd state of the containerezed application.
+horzental scaling and load balancing :- k8's can scale up and scale down the application based on requirements.
+
+2. How is Kubernetes different from Docker Swarm?
+
+Docker Swarm can’t do auto-scaling (as can Kubernetes); 
+Docker Swarm doesn’t have a GUI; Kubernetes has a GUI in the form of a dashboard
+Docker Swarm does automatic load balancing of traffic between containers in a cluster, while Kubernetes requires manual intervention for load balancing such traffic.
+Docker requires third-party tools like ELK stack for logging and monitoring, while Kubernetes has integrated tools for the same
+Docker Swarm can share storage volumes with any container easily, while Kubernetes can only share storage volumes with containers in the same pod
+Docker can deploy rolling updates but can’t deploy automatic rollbacks; Kubernetes can deploy rolling updates as well as automatic rollbacks
+
+3. 
+
+What is a Kubernetes Ingress Controller?
+A Kubernetes Ingress Controller is a software component responsible for implementing the rules specified in the Ingress resource. It acts as a gateway between external traffic and services running within a Kubernetes cluster, enabling seamless routing and service exposure.
+
+Why do I need an Ingress Controller?
+An Ingress Controller simplifies the process of managing external traffic and service exposure in Kubernetes. It provides advanced routing capabilities, load balancing, SSL termination, and security features, making it easier to expose services to the outside world while ensuring scalability and reliability.
+
+What are some popular Ingress Controllers?
+Some widely used Ingress Controllers in the Kubernetes ecosystem include Nginx Ingress Controller, Traefik, and HAProxy Ingress Controller. These controllers offer various features and integrations, allowing you to choose the one that best fits your requirements.
+
+What benefits do Ingress Controllers offer?
+Ingress Controllers provide several benefits, including simplified service exposure, advanced traffic management, load balancing, enhanced security through SSL termination and authentication mechanisms, scalability, and flexibility to adapt to changes in the Kubernetes cluster.
+
+Can I use multiple Ingress Controllers in a Kubernetes cluster?
+While it is technically possible to use multiple Ingress Controllers in a Kubernetes cluster, it is generally recommended to choose one as the primary controller to avoid conflicts and ensure consistent routing rules and behavior.
+
+Are Ingress Controllers compatible with cloud-based load balancers?
+Yes, Ingress Controllers can work with cloud-based load balancers. In such cases, the Ingress Controller acts as an interface between Kubernetes and the cloud load balancer, providing additional routing and management capabilities specific to Kubernetes services.
+
+
+Create a new Kubernetes namespace
+=======================================
+$ kubectl create namespace <name>
+A YAML file, like any other Kubernetes resource, can be created and used to create a namespace:
+
+my-namespace.yaml: 
+
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: <insert-namespace-name-here>
+Then run:
+
+$ kubectl create -f my-namespace.yaml
+The command to display all namespaces in the cluster is:
+
+$ kubectl get namespace
+How to switch between Kubernetes namespaces?
+When addressing namespaces, actions must include the “-namepsace=” option in the command. Because this can be time-consuming, the default namespace can be modified by using the kubectl config command to set the namespace in the cluster context.
+
+To switch from the default namespace to ‘K21,’ 
+for example, type: 
+command:- kubectl config set-context –current –namespace=K21. This will make ‘K21’ the default namespace for all future kubectl commands.
+
+How to rename a Kubernetes namespace?
+Renaming a Kubernetes namespace is not recommended, so choose namespaces (other than the default) with caution.
+
+How to delete a Kubernetes namespace?
+Delete a namespace with the below command:
+$ kubectl delete namespaces <name>
+
+Because deletion is an asynchronous activity, the namespace will appear as ‘terminating’ until it is deleted.
+
+Warning⚠️:  The deletion of a namespace is the final act. Everything in the namespace will be deleted, including all services, running pods, and artifacts.
+Garbage collection will be performed on anything that previously existed in that namespace. Before performing this action, ensure that everything in the namespace has been deleted.
