@@ -15,6 +15,10 @@ kubectl get nodes --show-labels
 kubectl cluster-info
 kubectl get nodes
 
+docker ps --> it will display container details 
+docker ps -a --> it will show more details  
+docker run centos echo hello --> it will pull and download the image and pring message hello
+docker search centos --? to search any image using this command
 
 NODE TYPE COMPONENT WHERE TO FIND LOGS
 Master API Server	 /var/log/kube-apiserver.log
