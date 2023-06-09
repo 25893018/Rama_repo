@@ -76,6 +76,13 @@ kubectl api-resources
 kubectl api-versions
 kubectl pod.spec
 kubectl pod.volume
+kubectl get pods -o wide
+
+To login into container: kubectl exec -it container -c busybox1 /bin/bash
+ip a
+
+
+
 
 sample yaml file for deployment:
 
