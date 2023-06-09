@@ -15,6 +15,83 @@ kubectl get nodes --show-labels
 kubectl cluster-info
 kubectl get nodes
 
+kubectl run nginx --nginxname=nginx   --> this run command will work like a deployment ..recommed to use this command to bring up /pod monitor continusely if 
+unfortunatly delete pod .. it will create new pod automatically.
+
+kubectl get all 
+kubectl delete pod pod name
+kubectl get deployments
+
+depolyments : deployment is nothing but a suppose if pod is mistakenly deleted ,it will brimg up pod automatically.
+========
+replicat set is nothing but a you can create number of pods 
+=========
+example: replicat set =3 means it will create 3 pods at a time with that mentioned image.
+
+recreate --> in this method we have down time to recreate pods. you need to bring down the pods to bring up another version pods. so there is a down time here.
+========
+rollingout  --> in this method it will not down all pods at a time insted first pod will be down and then version will be update.
+=========
+again second pod will be down and then version will be update
+again third pod will be down and then version will be update.......;
+
+default will be in k8's rollingout method apply.
+kubectl create -f nginxdeploy.yml   --> this is initial creation 
+kubectl get deployment.apps/nginxdeploy
+
+kubectl apply -f nginxdeploy.yml    --> this command is for when you are updating version changes/updates for continusly to scalup or down pods
+kubectl get deployment.apps/nginxdeploy
+kubectl get pods
+
+kubectl set image deployment/nginix nginx=nginx:latest  --> to move alphine version to latest version 
+
+kubectl get deployment
+kebectl get all
+
+you can see now difference old version to new version pods are updated.
+
+suppose if i want to move previous version use below rollout command 
+
+kubectl rollout undo deployment//nginx   --> to move old /previous version
+kubectl get replicaset
+
+to see error details for pod
+=====================
+kubectl describe pod podname
+
+please note always try to change yaml file for image updates. that is the best option insted running commands.
+
+kubectl explain deployment    --> to show deployment version to use in yaml file
+kubectl rollout status
+kubectl rollout history deployment/nginx
+kubectl rollout status deployment/nginx
+
+sample yaml file for deployment:
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: web
+spec:
+  selector:
+    matchLabels:
+      app: web
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+       —name: nginx
+          image: nginx:alphine
+          ports:
+           —containerPort: 80
+ ==========================================================================================
 docker ps --> it will display container details 
 docker ps -a --> it will show more details  
 docker run centos echo hello --> it will pull and download the image and pring message hello
