@@ -22,12 +22,16 @@ kubectl get all
 kubectl delete pod pod name
 kubectl get deployments
 
+yaml:==Aint markup language 
+yaml is used for to define resources in k8's
+yaml file you can keep in github and use.
+
 depolyments : deployment is nothing but a suppose if pod is mistakenly deleted ,it will brimg up pod automatically.
 ========
 replicat set is nothing but a you can create number of pods 
 =========
 example: replicat set =3 means it will create 3 pods at a time with that mentioned image.
-
+*****deployment have two types of methods to create/update versions:
 recreate --> in this method we have down time to recreate pods. you need to bring down the pods to bring up another version pods. so there is a down time here.
 ========
 rollingout  --> in this method it will not down all pods at a time insted first pod will be down and then version will be update.
@@ -40,6 +44,7 @@ kubectl create -f nginxdeploy.yml   --> this is initial creation
 kubectl get deployment.apps/nginxdeploy
 
 kubectl apply -f nginxdeploy.yml    --> this command is for when you are updating version changes/updates for continusly to scalup or down pods
+kubectl delete -f nginxdeploy.yml
 kubectl get deployment.apps/nginxdeploy
 kubectl get pods
 
@@ -65,6 +70,12 @@ kubectl explain deployment    --> to show deployment version to use in yaml file
 kubectl rollout status
 kubectl rollout history deployment/nginx
 kubectl rollout status deployment/nginx
+kubectl get resources -o yaml > myfile.yaml
+
+kubectl api-resources
+kubectl api-versions
+kubectl pod.spec
+kubectl pod.volume
 
 sample yaml file for deployment:
 
