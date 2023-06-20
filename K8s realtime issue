@@ -2,8 +2,10 @@
 https://komodor.com/learn/how-to-fix-createcontainerconfigerror-and-createcontainer-errors/
 
 
-ConfigMap is missing—a ConfigMap stores configuration data as key-value pairs.	Identify the missing ConfigMap and create it in the namespace, or mount another, existing ConfigMap.
-Secret is missing—a Secret is used to store sensitive information such as credentials.	Identify the missing Secret and create it in the namespace, or mount another, existing Secret.
+ConfigMap is missing—a ConfigMap stores configuration data as key-value pairs.	Identify the missing ConfigMap and create it in the namespace, 
+or mount another, existing ConfigMap.
+Secret is missing—a Secret is used to store sensitive information such as credentials.	Identify the missing Secret and create it in the namespace,
+or mount another, existing Secret.
 
 commands:
 kubectl get pods
@@ -12,16 +14,22 @@ kubectl describe pod [name] /tmp/troubleshooting_describe_pod.txt
 kubectl get configmap configmap name
 kubectl get secret
 kubectl get nodes --show-labels
-kubectl cluster-info
+kubectl cluster-info 
 kubectl get nodes
 
+kubectl create -f busybox.yaml --> this is not recommned way to create pods becz when pod is down/deleted , it will not bring up automatically when using this
+command. insted always use below run command.
 kubectl run nginx --nginxname=nginx   --> this run command will work like a deployment ..recommed to use this command to bring up /pod monitor continusely if 
+or
+kubectl run -f  busybox.yaml
+
 unfortunatly delete pod .. it will create new pod automatically.
 
 kubectl get all 
 kubectl delete pod pod name
 kubectl get deployments
 
+kubectl api -versions  ==>to check api versions
 yaml:==Aint markup language 
 yaml is used for to define resources in k8's
 yaml file you can keep in github and use.
@@ -65,12 +73,12 @@ to see error details for pod
 kubectl describe pod podname
 
 please note always try to change yaml file for image updates. that is the best option insted running commands.
-
+kubectl api-versions
 kubectl explain deployment    --> to show deployment version to use in yaml file
 kubectl rollout status
 kubectl rollout history deployment/nginx
 kubectl rollout status deployment/nginx
-kubectl get resources -o yaml > myfile.yaml
+kubectl get resources -o yaml > myfile.yaml  --> to  get another resource info
 
 kubectl api-resources
 kubectl api-versions
@@ -80,9 +88,6 @@ kubectl get pods -o wide
 
 To login into container: kubectl exec -it container -c busybox1 /bin/bash
 ip a
-
-
-
 
 sample yaml file for deployment:
 
@@ -177,7 +182,6 @@ Then run:
 
 $ kubectl create -f my-namespace.yaml
 The command to display all namespaces in the cluster is:
-
 $ kubectl get namespace
 How to switch between Kubernetes namespaces?
 When addressing namespaces, actions must include the “-namepsace=” option in the command. Because this can be time-consuming, the default namespace can be modified by using the kubectl config command to set the namespace in the cluster context.
@@ -197,3 +201,119 @@ Because deletion is an asynchronous activity, the namespace will appear as ‘te
 
 Warning⚠️:  The deletion of a namespace is the final act. Everything in the namespace will be deleted, including all services, running pods, and artifacts.
 Garbage collection will be performed on anything that previously existed in that namespace. Before performing this action, ensure that everything in the namespace has been deleted.
+
+Namespace:
+=========
+Kubernetes uses namespaces to organize objects/resources in the cluster. You can think of each namespace as a folder that holds a set of objects. 
+By default, the kubectl command-line tool interacts with the default namespace. If you want to use a different namespace, 
+you can pass kubectl the --namespace flag. For example, kubectl --namespace=mystuff references objects in the mystuff namespace.
+
+The kubectl command-line utility is a powerful tool.
+
+kubectl run namespace citi  --> it will create namespace called citi
+or
+kubectl deploy namespace citi
+kubectl get all --all-namespaces   to see all namespaces
+kubectl get namespaces
+kubectl get pods -n trietree   --> here n attribute will go and check in that trietree namespace how many pods are there and those will display.
+kubectl get all -n trietree   ==> to show all info in that namespace trietree
+kubectl get ns --> ns is short form of namespace
+
+to switch default namespace to specific namespace
+kubectl config set-context --current --namespace=default
+kubectl config set-context --current --namespace=trietree
+kubect get pods
+kubectl get pods -o wide   --> it will show ip addresss as well
+
+=========================
+networking:
+===================
+default ip will be 172.17.0.1 when pod is created it will be automatically allowcated
+pods will create/manage using deployments(deployment.yaml)
+services will manage deployments
+using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable name in yaml file, 
+then when do deployment automatically services will connect to app/pods.
+
+kubectl get pods -o wide   --> it will show ip addresss as well
+kubectl run/apply -f deploy.yaml
+kubectl describe pod twocontainers  --> two containes is a pod name where we mentioned in yaml file under metadata
+to see more details use describe and use created two containers in pod using same ip
+
+kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a container name and twocontainers is a pod name. we are checking here busybox1 container ip 
+kubectl exec -it twocontainers -c busybox2 /bin/sh  -->  here busybox2 is a container name and twocontainers is a pod name. we are checking here busybox2 container ip 
+
+ttiwill be same ip for both containers, so in pod if you have multiple containers, ip will be same for all containers.
+
+services:= suppose i have two nodes , one node have two pods and another node have one pod.each pod allowcated one ip for each pod, so total 3 ips allowcated 
+for pods. every node have one kubeproxey and iptable( in iptable store all ip addresses) , hence kubeproxey will check ipaddresses in iptables , based on ip 
+services will connect pods using labels , it will work like load balancer.
+
+using labels we can create service object 
+how service interact with pods:- 
+===========================
+every node have one kubeproxey and iptable.
+kubeproxey will route ip traffic to the IPtables
+
+node --> kubeproxey-->iptables -->pod -->services(lables)
+
+so here using labels services will connect to pods based on ip
+in service object we have ipaddress, target port and endpoint.
+
+service types: 
+=============
+nodeport  --range start from 30000 to 32767
+clusterip
+load balancer.
+
+
+kubectl get nodes -o wide
+ping ip   --> here yu can ping node ip 
+kubectl get pods -o wide
+ping ip   --> but here you cannot ping pod ip
+
+sample yaml for pod
+==================
+apiVersion: v1
+kind: Pod
+metadata:
+  name: myapp-pod
+  labels:
+    app: myapp
+spec:
+containers:
+- name: nginx-container
+image: nginx
+
+sample yaml file for service.yaml:
+==============================
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-service
+  spec:
+selector:
+    app: myapp
+ports:
+- targetPort: 80
+port: 80
+nodePort: 30020
+type: nodePort
+
+kindly note when you are creating service lable and selector app names are should be same . then service will connect to application pod
+
+kubectl run -f busyboxlable.yaml
+kubectl run -f service.yaml
+kubectl get svc or service
+kubectl get nodes -o wide
+curl http://nodeip:nodeportnumber   --> you can access /expose application using service and also you can browse.
+
+
+
+
+
+Ingress: to expose http & https traffic.
+=====
+
+
+
+
