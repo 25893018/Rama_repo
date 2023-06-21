@@ -239,7 +239,8 @@ kubectl run/apply -f deploy.yaml
 kubectl describe pod twocontainers  --> two containes is a pod name where we mentioned in yaml file under metadata
 to see more details use describe and use created two containers in pod using same ip
 
-kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a container name and twocontainers is a pod name. we are checking here busybox1 container ip 
+kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a container name and twocontainers is a pod name. we are checking here busybox1 container
+ip 
 kubectl exec -it twocontainers -c busybox2 /bin/sh  -->  here busybox2 is a container name and twocontainers is a pod name. we are checking here busybox2 container ip 
 
 ttiwill be same ip for both containers, so in pod if you have multiple containers, ip will be same for all containers.
@@ -326,6 +327,9 @@ Storage configuration:(volumes)
 kubectl exec -it vol2 touch /test/testfile -- to create test file  
 kubectl exec -it vol2 -- ls -l /test/testfile
 
+(-- ls -l)  --> here if you have -- that means kubectl knows this is a linux command to display output, otherwise it will give error
+not here any where if you are using linux command you can use -- using kubectl.
+
 shared volume/file --: same file it will create for multiple pods. it means sharing disk for multiple containers:
 
 
@@ -366,8 +370,60 @@ persistent volume:
 kubectl get pv (persistent volume)
 kubectl get pvc (persistent volume claim)
 
+stateful sets:---
+==============
+normallyy in deployment pods will create all at a time when we create. if any time pod is down and up again IP/hostname will change ,that will be the problem
+in production. to avoid this we can use stateful sets. when you use statfulsets , it will create pods one by one and create separate id for each pod. hence
+it will not change ip/hostname using stateful sets.
+
+$ kubectl delete statefulsets zk   -> zk is statefulset name giveen in yaml file.
+
+headless service:
+===============
+******when some one asking to create headless service , then clusterip should be "None".
+also in headless service we dont assign IPaddress, insted it will point to always Pod 0
+it will create DNS and write only to master(Pod 0)
+remining all other pods internally it will communicate to service and read data.
+
+Troubleshooting pods:
+==================
+kubectl exec -it podname -- /bin/sh   --> to enter into pod application
+
+when you do trouble shooting ip a command will not work inside the pod container, becz container has only application dependencies and libraries.
+
+so to troubleshoot more goto /proc
+do ls 
+then you can go to any process like ---- cd 1, or cd 100 or cat processname , if you want to comeout just do exit.
+kubectl logs podname --> to check logs 
+kubectl describe pod podname  --> to see more details for events/errors.
+kubectl cordon -h ==> cordon used for unschdule the node
+kubectl drain -h --> drain used for to move node into maintense status
+kubectl uncordon -h ==> uncordon used for to move the node normal status/schudle.
+
+
+kubernetes API management: API is nothing but what ever resoucres are making it to avilaible for end users , that is called API
+================
+using kubeproxey or curl we can access api's where using in yaml files.
+ yaml file --> aPI -->api server (will provide all apis and using kubeproxey we can access all apis)
+if you want to access api's you need authorized certificates like public, private, CA authorized certificates(mostly via TLS security). transfort layer security
+
+ normally in k8's directly using kubeproxey or curl we can access api's where using in yaml files insted of certications.
+to fetch details from API server:
+******to expose port/service
+kubectl proxy --port=8001
+curl http://localhost:8001/version
+curl http://localhost:8001/api/v1/namespaces/default
+curl http://localhost:8001/api/v1/namespaces/default/pods
+curl http://localhost:8001/api/v1/namespaces/default/pods/busybox1   --> here busybox1 is a container name to see details.
+curl -XDELETE http://localhost:8001/api/v1/namespaces/default/pods/busybox1   --> it will delete busybox1 pod try it on Linux mechine.
+kubectl api-versions --> to see all apis
+kubectl api-resources --> to see all resources
+
+kubectl explain pod --> it will give which api version to use in yaml file ..very importent to know.
+kubectl explain statefulsets
+
 Ingress: to expose http & https traffic.
-=====
+==========
 
 
 
