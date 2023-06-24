@@ -210,8 +210,8 @@ Garbage collection will be performed on anything that previously existed in that
 
 Namespace:
 =========
-Kubernetes uses namespaces to organize objects/resources in the cluster. You can think of each namespace as a folder that holds a set of objects. 
-By default, the kubectl command-line tool interacts with the default namespace. If you want to use a different namespace, 
+Kubernetes uses namespaces to organize objects/resources in the cluster. You can think of each namespace as a folder that holds a 
+set of objects. By default, the kubectl command-line tool interacts with the default namespace. If you want to use a different namespace, 
 you can pass kubectl the --namespace flag. For example, kubectl --namespace=mystuff references objects in the mystuff namespace.
 
 The kubectl command-line utility is a powerful tool.
@@ -222,7 +222,7 @@ kubectl deploy namespace citi
 kubectl get all --all-namespaces   to see all namespaces
 kubectl get namespaces
 kubectl get pods -n trietree   --> here n attribute will go and check in that trietree namespace how many pods are there and those will display.
-kubectl get all -n trietree   ==> to show all info in that namespace trietree
+kubectl get all -n trietree   ==> to show all resource info in that namespace trietree
 kubectl get ns --> ns is short form of namespace
 
 to switch default namespace to specific namespace
@@ -237,8 +237,8 @@ networking:
 default ip will be 172.17.0.1 when pod is created it will be automatically allowcated
 pods will create/manage using deployments(deployment.yaml)
 services will manage deployments
-using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable name in yaml file, 
-then when do deployment automatically services will connect to app/pods.
+using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable 
+name in yaml file, then when do deployment automatically services will connect to app/pods.
 
 kubectl get pods -o wide   --> it will show ip addresss as well
 kubectl run/apply -f deploy.yaml
@@ -249,10 +249,11 @@ kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a cont
 ip 
 kubectl exec -it twocontainers -c busybox2 /bin/sh  -->  here busybox2 is a container name and twocontainers is a pod name. we are checking here busybox2 container ip 
 
-ttiwill be same ip for both containers, so in pod if you have multiple containers, ip will be same for all containers.
+it will be same ip for both containers, so in pod if you have multiple containers, ip will be same for all containers.
 
-services:= suppose i have two nodes , one node have two pods and another node have one pod.each pod allowcated one ip for each pod, so total 3 ips allowcated 
-for pods. every node have one kubeproxey and iptable( in iptable store all ip addresses) , hence kubeproxey will check ipaddresses in iptables , based on ip 
+services:= suppose i have two nodes , one node have two pods and another node have one pod.each pod allowcated one ip for each pod, 
+so total 3 ips allowcated for pods. every node have one kubeproxey and iptable( in iptable store all ip addresses) , 
+hence kubeproxey will check ipaddresses in iptables , based on ip 
 services will connect pods using labels , it will work like load balancer.
 
 using labels we can create service object 
@@ -306,7 +307,8 @@ port: 80
 nodePort: 30020
 type: nodePort
 
-kindly note when you are creating service lable and selector app names are should be same . then service will connect to application pod
+kindly note when you are creating service lable and selector app names are should be same . 
+then service will connect to application pod
 
 kubectl run -f busyboxlable.yaml
 kubectl run -f service.yaml
@@ -317,10 +319,11 @@ curl http://nodeip:nodeportnumber   --> you can access /expose application using
 clusterIP:--
 =======
 suppose i have three pods , each pod have one ip, when pod is down and created new pod, then it will create new ip and ip will change.
-samething will happen for other pods as well, to avoid this you can directly connect to cluster ip and can use for all PODS, just like a interface.
+samething will happen for other pods as well, to avoid this you can directly connect to cluster ip and can use for all PODS, 
+just like a interface.
 
 Load Balancer:
-============            you can assing ip pubicly/externally to expose service/application.
+============            you can assign ip pubicly/externally to expose service/application.
 
 kubectl get svc or service
 
@@ -378,8 +381,8 @@ kubectl get pvc (persistent volume claim)
 
 stateful sets:---
 ==============
-normallyy in deployment pods will create all at a time when we create. if any time pod is down and up again IP/hostname will change ,that will be the problem
-in production. to avoid this we can use stateful sets. when you use statfulsets , it will create pods one by one and create separate id for each pod. hence
+normallyy in deployment pods will create all at a time when we create. if any time pod is down and up again IP/hostname will change ,
+that will be the problem in production. to avoid this we can use stateful sets. when you use statfulsets , it will create pods one by one and create separate id for each pod. hence
 it will not change ip/hostname using stateful sets.
 
 $ kubectl delete statefulsets zk   -> zk is statefulset name giveen in yaml file.
@@ -435,7 +438,7 @@ Traffic routing is controlled by rules defined on the Ingress resource.
 ==========
 ***you can expose services using clusterip , nodeport, load balancer and ingress.
 using ingress, you can redirect services from one page to another page easily
-example:- i have one application called api.com , in that i have publisher page, testing page, developer page....using same server(api.com) i want to redirect 
+h aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaamaaaaaaaaaaaaaaaaexample:- i have one application called api.com , in that i have publisher page, testing page, developer page....using same server(api.com) i want to redirect 
 all pages one by one or services , we can use for ingress.
 
 using nodeport you cannot expose service/applications publicly, this is within the application
