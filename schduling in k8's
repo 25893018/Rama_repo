@@ -1,0 +1,74 @@
+========================================================
+  Advanced K8's Schduling:*************************************************
+  =======================================================
+  how schduling works in K8's.
+  
+  manually schduling pods on diff nodes
+  nodeName
+  nodeSelector
+  podAffnity/anti-Affinity
+  node affinity and Anti Affinity
+  Node taints and Pod Tolrations
+  =========
+  nodeName
+  ==========
+  if you want to schdule/create any pod manually then we can go for advanced
+  schduling.
+  
+  you can create pod on particualr node manullay using below methods. thse are
+  advanced schduling methods in k8's.
+  
+  ====nodeName  - -> if you dont mention in yaml file nodeName then by default 
+  schduler will come picture and deploy node where its required.
+  
+  ***thorugh command can write yaml file using below command:
+  
+  kubectl run nginx-manual-sche --image nginx --dry-run=client -o yaml > manschdule.yaml
+  
+ vi manschdule.yaml
+ 
+ apiVersion: v1
+kind: Pod
+metadata:
+labels: 
+run: nginx-manual-sche
+name:nginx-manual-sche
+spec:
+nodeName:node id name what you want here copy and paste
+
+containers:  
+  - image: nginx
+  name: nginx-manual-sche
+  
+  kubectl apply -f manschdule.yaml
+  
+  if you want to see more details about pod you can use describe command
+  
+  kubectl describe pod podname
+  
+  Note: nodeName always should be assgined in Prod sepeciation.
+  
+  
+  ===================================
+ 
+  nodeSelector
+  podAffnity/anti-Affinity
+  node affinity and Anti Affinity
+  Node taints and Pod Tolrations
+  
+  
+  Adv Pod schduling with node affinity and Anti Affinity
+  
+  understanding Node Taints and Pod Tolrations 
+  understanding INIT- containers
+  understanding of DaemonSets
+  
+   first check
+   kubectl get nodes 
+   kubectl run nginx --image nginx --check now where it is creating/which node
+   
+   kubectl get pods nginx -o yaml --> it will show you create default node/pod details
+   default it will assign node name to the pod when you run image. this is responsible
+   for schduler and it works on based on algorthims.
+   
+   
