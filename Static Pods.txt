@@ -1,0 +1,59 @@
+static Pods:
+  ==========
+  static pods directly managed by Kubelet.
+  
+  Static Pods are managed directly by the kubelet daemon on a specific node, without the API server observing them. Unlike Pods that are managed by the control plane (for example, a Deployment); instead, the kubelet watches each static Pod (and restarts it if it fails).
+
+Static Pods are always bound to one Kubelet on a specific node.
+
+The kubelet automatically tries to create a mirror Pod on the Kubernetes API server for each static Pod. This means that the Pods running on a node are visible on the API server, but cannot be controlled from there. The Pod names will be suffixed with the node hostname with a leading hyphen.
+
+Note: If you are running clustered Kubernetes and are using static Pods to run a Pod on every node, you should probably be using a DaemonSet instead.
+Note: The spec of a static Pod cannot refer to other API objects (e.g., ServiceAccount, ConfigMap, Secret, etc).
+Note: Static pods do not support ephemeral containers.
+
+ login to any worker node instance:
+ 
+ sudo vi /etc/kubernetes/manifests
+ cd /etc/kubernetes/manifests
+ ls -lrt
+ 
+ sudo vi static_pod.yaml
+ 
+ apiVersion: v1
+kind: Pod
+metadata:
+name:my-static_ pod
+spec:
+
+containers:
+   restartPolicy: Never   
+  - name: mybusybox
+  image: busybox
+ 
+  
+ when you save static_pod.yaml file in backend/on node static pod automatically
+ create with suffix name.
+ 
+ * statically created pod in worker node is called static pod and this is managed 
+ by kubelet.
+ 
+ * same pod it will show/auomatically create and that is point to static node 
+ you when you use command called
+ kubectl get pods --> this is called mirror pod and maanaged by API server.
+ 
+ 
+ please note static pods we cannot remove normallay . insted you can go where you created
+ yaml file to create pod there you can go and remove pod, else you cant remove any where
+ 
+sudo rm -rf  my-static_pod
+
+$ kubectl get pods -n kube-systems --> to see static pod details:
+
+
+
+ 
+ 
+ 
+  working with Resources Limits in K8s.
+  
