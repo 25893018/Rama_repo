@@ -1,0 +1,51 @@
+Route s3 notes
+route 53 service is used to map application domain name to server ip.
+
+we will provide domain name to end users
+
+when user access domain in browser then route 53 will route that request to server ip where the app is running
+this process is called as domain name service mapping.
+
+to map DNS we have to purchase domain first
+
+minimum domain cost is 12 $ per year for.com extensio
+.link extension $5 dollors
+
+we can register the domains min -1 year and max is 10 years
+
+to purchase domain -
+go to route53 -->click on domain --> click on registered domain --> give your faviourate domain to register on Choose a domain name.
+
+then click on add to cart and continue and complete order
+
+now once domain request is placed , then go to billing service --> go to purchase orders  pay the bill and then your domain willl be created.
+
+=======================
+Procedure to configure DNS Mapping:
+
+register domain using route 53 "register domain"
+go to billing and pay th bill
+now go to hosted zones to configure our hosted static web site
+
+create record to sync your URL
+
+
+
+Design, build and maintain the CI/CD infrastructure and tools on Hybrid cloud ( AWS, VMware)
+Good knowledge of E2E DevOps processes as per industry standards
+Hands-on experience in installation, upgrades, and maintenance of DevOps tools like JIRA, Bitbucket, Jenkins, Sonarqube, Nexus, etc.
+Design, build and maintain the DevOps tools enterprise-wide
+Migrate the tools that are currently on-premise to AWS
+Containerize the tools and deploy them on AWS EKS
+Manage the tools deployed and provide the required support to the end users
+Experience in containerized Deployment and clustering using Kubernetes in public cloud platforms (preferably AWS)
+Experience in industry-standard methodologies like Software Development Life Cycle (SDLC), Software Test Life Cycle (STLC), and project delivery frameworks (Agile)
+Knowledge of SSL and certificates management in PROD environments
+Should have a good understanding of implementing and maintaining governance standards
+Should have good knowledge of audit processes
+Strong troubleshooting skills
+Strong presentation, verbal communication, and written communication skills.
+
+
+
+
