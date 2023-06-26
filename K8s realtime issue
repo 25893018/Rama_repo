@@ -496,6 +496,102 @@ docker ps | grep -i ingress   --> to see ingress controller running or not
 kubectl get deployments
 minikube ip
 
+rollout of deploymets:
+=======================
+kubectl create deployment my-app --image=nginx --dry-run -o yaml > nginx-deployment.yaml  -> it wll create nginx pod  and also create yaml file
+to see content in file.
+
+kubectl run -f nginx-deployment.yaml 
+kubectl get deployment
+kubectl get pods
+
+kubectl scale deployment my-app --replicas =5  to scaleup the pods 
+kubectl set image deployment my-app nginx=nginx:latest   --old vesion to latest update
+kubectl rollout history deployment  --to see hiso=tory of deployment and then if yu want to see revisions or old versions use below commands.
+
+kubectl rollout history deployment my-app --revision=1
+kubectl rollout history deployment my-app --revision=2
+
+kubectl rollout undo deployments my-app --to-revision=1   ---to move latest to older version or earlier version
+kubectl scale deployment my-app --replicas =2 --> to scale down the pods
+
+kubectl get pods
+
+how to create different env teams in production using lables
+============================================================
+
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=admin.
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=db.
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=dev.
+
+kubectl get pods --show-labels
+kubectl get prod -l 'team in (admin,dev)' env=prod --show-labels   --> it will show env=prod teams 
+
+kubectl label pods backend env-    --> to remove prod enviornment label(env=prod)
+
+annotations:--if you want to contact any team we will mention in annotations as a team name
+===========
+kubectl annotate pod/backed contact="trietree"  it will create annotation as a - trietree team, sothat you can contact team 
+if any issus in pod
+
+kubectl annotate pod/frontend contact="trietree" commit="ttt3"
+
+kubectl get pods -o yaml | grep -C 4 'annotations'  --> it will show 4 lines
+
+or 
+kubectl describe pod backend   --> you can latest version and as well as annonations
+
+k8'Events and logs:-
+===================
+kubectl version --short
+kubectl cluster-info
+helm version --short
+kubectl create deploymet logger --image =chentex/random-logger
+
+kubectl delete deployments logger
+kubectl get deployment
+kubectl scale deploymet logger --replicas=3
+kubect get events
+kubectl get event --namespace=kube-system  --> you can troubelshoot using event also if any errors in pods/namespaces.
+
+kubectl get event --field-selector=involvedObject.name=logger    ---this is shortcut to get details for describe below using command
+or
+kubectl describe deployment logger            }both are same resluts will give you
+
+
+kubectl logs deployment/logger   --> it will show you deployment logs
+kubectl logs --selector app=logger --> show you logs  --> deployment logs
+
+kubectl logs podname -->to show error pod logs
+
+to edit deployment/pods
+=======================
+kubectl edit deployment logger
+kubectl edit pod podname
+
+chaoskube
+----------: is used for peridically kills random pods in your kubernetes cluster. it is used for testng purpose
+
+$ chaoskube
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Kubernetes :
 ==========================================
@@ -503,10 +599,23 @@ Kubernetes :
 2) node affinity an pod affinity 
 3) how to check the logs of a pod or deployment?
 4) how to check how many pods are running
+kubectl get pods -A
+kubectl get pods -all-namespaces -A
+
 5) what are deployment strategy used in your project
+baed on your projec
+
 6) what is init container
+before start the actual container , init container will start to initialize the container and complete and then application container
+will start.
+
 7) what is statefullset
+
 8) what is ingress
+inress is an api object which provides the routing traffic rules to manage external users access to the services in k'8s cluster
+typically via http or https:
+
+
 9) difference between headfull and headless service
 10) difference between secret and configmap
 11) what is livenessprobe and readynesspeobe
