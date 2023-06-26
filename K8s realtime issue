@@ -1,3 +1,92 @@
+Kubernetes Setup Methods
+Learning Setup:
+Minikube
+Kind
+
+Producton Setup:
+kubeadm
+kops ( Works for only AWS)
+Kubespray
+
+Kubernetes As a Service
+
+AKS - Azure Kubernetes Services
+EKS - Elastic Kubernetes Service
+GKE - Google Kubernetes Engine.
+  
+=======================
+Simple manifest file/yaml file creation  to create prod
+===================================
+
+vi pod.yaml
+apiVersion: v1
+kind: Pod  -->P capital 
+metadata:
+     name: arch-pod
+
+spec:
+   containers:
+       - image: nginx
+         name: arch-container
+  
+  kubectl apply -f pod.yaml  --> it will apply/execute to a create prod using yaml file.
+  or 
+  kubectl create -f pod.yaml  -> create can use only for first time 
+  , if you are same object/pod again better go for use apply
+  
+====
+diference betwwen imperative and declarative 
+=====  imperative (run command using cli) 
+  
+$ kubectl run nginx or kubectl run nginxpod --imagename =nginx
+   
+ ===== vs declarative ( through manifest/yaml)
+  
+     kubectl create/apply -f .\pod.yaml
+     
+======To Delete Pod=============
+kubectl delete pod nginxpod
+kubectl rm pod nginxpod
+======================================
+-docker will deploy/create using images in docker contaiers
+-k8s will create using images in k8s Pods , Pods have one or more containeers
+but k8s will not recommand more than one container in pods.
+- pod is have IP address and container have port numbers in K8's.
+
+if pod is deleted and again configure IP will change if we using Kind:pod
+===================
+
+
+  
+   
+   
+  
+  
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 https://komodor.com/learn/how-to-fix-createcontainerconfigerror-and-createcontainer-errors/
 
