@@ -1,3 +1,13 @@
+Helm:
+
+Helm introduction
+helm installation
+how to install charts
+creating a new helm chart
+charts templats
+chart repo manageent
+upgrading and robbacking helm charts
+
 https://phoenixnap.com/kb/what-is-helm
 
 Helm is a Kubernetes deployment tool for automating creation, packaging, configuration, and deployment of applications 
