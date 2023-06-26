@@ -122,7 +122,95 @@ roleRef:
   check in role.yaml , you dont have permissions to create, you should use "create" in verbs to create pod in namespace in verbs.  
  
  after adding try 
-  
+  ===================================
+
+ 
+============== 
+managing applicaion configuration
+=================
+    - configuringEnv varaibles in apps
+    - using  config maps for configuration
+    - using screts for sensitive data in k8's.
+managing container resources
+monitoring container health with probes
+building self-healing pods with restart policies
+creating multi container pods
+
+installing kubernetes dashboard:
+
+kubectl get ns  --> namespaces
+kubectl get deploy
+kebectl get nodes
+kubectl get pods 
+
+insted executing all above these commonds , you can create dashboard using
+
+kubectlproxey or kubectl port or ingress.
+
+git URL: github.com/kubernetes/dashboard --all steps you can see it here
+
+Install
+To deploy Dashboard, execute following command:
+
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.7.0/aio/deploy/recommended.yaml
+
+kubectl get deploy,svc  --defalut dashboard details give you
+kubectl get deploy,svc -n kubernetes-dashboard
+
+
+if you want to access your dashboard from outside /external(http)
+you can use /go to github/docs/dashboard arguments and then take port and update your yaml file in your arguments sectin.
+
+kubectl edit deploy kubernetes-dashboard -n kubernetes-dashboard
+
+args:
+- --insecure-port:9090
+along with you need ot change 
+port:9090
+scheme:HTTP insted HTTPS
+
+after yaml update you can see now new pod is creted and you want to see on your dashboard now
+
+kubectl get svc -n kubernetes-dashboard
+
+directly Cluster IP you cannot access from out side , but i want to acccess from outside with in the cluster , so i want to edit the service
+
+
+kubectl edit svc kubernetes-dashboard -n kubernetes-dashboard
+
+then edit --> search type( by default it will be ClusterIP) 
+
+change it to NodePort to access
+
+targetport and port numbers will be 9090
+
+now how to access dashboard 
+
+kubectl get ns
+kubectl get sa -n kubernetes-dashboard   -to see default service
+(service account)
+
+kubectl get rolebindings -n kubernetes-dashboard
+
+to create a role to the serivice account to access dashbard
+
+kubectl create rolebinding ramarolebinding --seriviceaccount kubernetes-dashboard:kubernetes-dashboard --clusterrole view -n kubernetes-dashboard --dry-run=client -o yaml
+
+please note --dry-run=client -o yaml ( to view your file how it is going to create)
+
+this is for only particular dashboard to access( only particular namespace)
+
+kubectl create rolebinding ramarolebinding --seriviceaccount kubernetes-dashboard:kubernetes-dashboard --clusterrole view -n kubernetes-dashboard
+
+else i want to access my entire cluster to access use this command
+
+kubectl create clusterrolebinding ramarolebinding --seriviceaccount kubernetes-dashboard:kubernetes-dashboard --clusterrole view -n kubernetes-dashboard
+
+role binding is nothing but a access to particular namespace or give access permissions to dashboard to show on web
+
+Clusterrolebinding is nothing but a access to entire cluster namespaces to show on dashboard
+
+
   kubectl run pod1 --image nginx -n dev
   
   same like if i want to delete pod, still i dont have access as i didnt given type of access in roles.yaml...you can give "delete" in verbs to delete a pod
