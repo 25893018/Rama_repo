@@ -1,0 +1,130 @@
+https://phoenixnap.com/kb/what-is-helm
+
+Helm is a Kubernetes deployment tool for automating creation, packaging, configuration, and deployment of applications 
+and services to Kubernetes clusters.
+
+Kubernetes is a powerful container-orchestration system for application deployment. There are multiple independent resources 
+to deal with, and each requires a dedicated YAML manifest file.
+
+What is Helm?
+If Kubernetes were an operating system, Helm would be the package manager. Ubuntu uses apt, CentOS uses yum, and Kubernetes uses helm.
+
+Helm deploys packaged applications to Kubernetes and structures them into charts. The charts contain all pre-configured application 
+resources along with all the versions into one easily manageable package.
+
+
+What Is a Helm Chart?
+Helm charts are Helm packages consisting of YAML files and templates which convert into Kubernetes manifest files. 
+Charts are reusable by anyone for any environment, which reduces complexity and duplicates. Folders have the following structure:
+
+Deploy Prometheus and Grafana on EKS cluster using Helm chart. 
+
+Helm Version Required: 3.0
+
+https://youtu.be/kADwAYTErgA
+
+Prometheus Helm Chart:
+https://github.com/prometheus-communi...
+https://github.com/25893018/helm-charts
+https://github.com/25893018/helm-charts-1/
+https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
+https://github.com/orgs/grafana/repositories?page=2
+
+kubectl get nodes
+kubectl get pods
+kubectl create namespace Prometheus
+kubectl get namespace
+
+Command to deploy Prometheus:
+helm install prometheus prometheus-community/prometheus \
+    --namespace prometheus \
+    --set alertmanager.persistentVolume.storageClass="gp2" \
+    --set server.persistentVolume.storageClass="gp2" \
+    --set server.service.type=LoadBalancer
+
+kubectl get all -n prometheus
+copy here load balancer url prometheus to use access or accesss outside website.try access url whether it is working or not
+
+kubectl create namespace grafana
+kubectl get grafana
+
+mkdir -p monitoring/grafana
+cat > /monitoring/grafana/grafana.yaml
+
+  datasources:
+  datasources.yaml:
+  apiVersion: 1
+  datasources:
+     - name: Prometheus
+       type: prometheus
+       url: http://prometheus-server.prometheus.svc.cluster.local
+       access: proxy
+       isDefault: true
+
+Command to deploy Grafana:
+helm install grafana grafana/grafana \
+    --namespace grafana \
+    --set persistence.storageClassName="gp2" \
+    --set persistence.enabled=true \
+    --set adminPassword='secretpass' \
+    --values  ~/monitoring/grafana/grafana.yaml \
+    --set service.type=LoadBalancer
+
+kubectl get all -n grafana
+
+copy here load balancer url for graphana to use access or accesss outside website.try access url whether it is working or not
+    
+login now graphana...using username - admin and password ..if you forgat password use below command to get 
+
+kubectl get secret --namespace grafana grafana -o jsonpath="{.data.admin.password}' | base64 --decode ; echo
+
+click on + symbol --> import to create a dashboard  and select prometheus 
+
+3119
+6417
+
+how to update grafana version update
+================================
+
+to update sofware version we need to create value file using  helm show.
+
+$ helm show values grafana/grafana > values_grafana.yaml
+
+goto image tag and update version 8.3.5 to 8.4.1 and save file.
+also if you want to use loadbalancer ip you need to change in service tag type then update cluster ip to loadbalancer.
+also update persistent tag enabled = false to true.
+also uncomment datasource to show promotheus on graphana dashboard
+this pieceof code you can uncomment:
+datasources:
+  datasources.yaml:
+  apiVersion: 1
+  datasources:
+     - name: Prometheus
+       type: prometheus
+       url: http://prometheus-server.prometheus.svc.cluster.local
+       access: proxy
+       isDefault: true
+  and make sure check url path is correct or not.  
+
+now update using command:
+
+helm upgrade grafana grafana/grafana -f monitoring/grafana/values_grafana.yaml -n grafana 
+
+kubectl get all -n grafana
+kubectl get pods -n grafana
+
+
+to delete all resource and if you upgrae again using above command it will up grafana again. this is just practie
+==========
+kubectl delete depoly grafana -n grafana
+helm upgrade grafana grafana/grafana -f monitoring/grafana/values_grafana.yaml -n grafana 
+
+to clean up resources:
+====================
+helm uninstall prometheus --namespace prometheus
+kubectl delete ns prometheus
+helm uninstall grafana --namespace grafana
+kubectl delete ns grafana
+
+
+#prometheus #grafana #AWS #EKS #devops #kubernetes #helm #Monitoring
