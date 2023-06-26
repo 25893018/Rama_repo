@@ -157,6 +157,9 @@ kubectl delete deployment/nginx
 note when deployment/nginx image is deleted, automatically releavent pod also will delete.
 
 kubectl api -versions  ==>to check api versions
+kubectl get componentstatus   -->it will show etc, schduler, control maanger status.
+kubectl get --raw /   --> it will show you all api details
+
 yaml:==Aint markup language 
 yaml is used for to define resources in k8's
 yaml file you can keep in github and use.
@@ -213,6 +216,7 @@ kubectl get resources -o yaml > myfile.yaml  --> to  get another resource info
 
 kubectl api-resources
 kubectl api-versions
+
 kubectl pod.spec
 kubectl pod.volume
 kubectl get pods -o wide
