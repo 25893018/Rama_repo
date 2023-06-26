@@ -1,0 +1,123 @@
+S3 - simple storage service
+
+=====================
+
+Amazon S3 is scalable , highly avilaible , durable and secure service.
+
+
+s3 is used for storage purpose and it is a object based storage.
+we can store flat files in S3 and can upload, download ,access files from s3.
+we cannot execute s3 files and we cannot install any s/w in S3.
+S3 providing unlimited storage and we cant attach S3 to Ec2 Instance.
+
+we can access S3 objects in Ec2 and S3 support static web hosting.
+S3 is serverless and will store data in buckets ,bucket is a container.
+bucket contains objects( files).
+S3 is a global but buckets are regional.
+S3 bucket name should be Unique
+note: always create bucket name with company name or project name.
+we cannot create one bucket inside another bucket.
+we can create multiple buckets in multiple regions.
+max we can create 100buckets in S3(soft limit)
+By default buckets are private, if required we can make it public.
+every bucket wil have its onw URL/endpoint.
+
+
+what are Storage classes:
+====================
+Standared frequently Access (FA)  --> if you need access frequently then go for FA access to store data.
+
+standared infrequently access (IA)  --> i want to access data rarely /montly once then go for IA.
+
+reduced REdundnacy Storage (RRS)
+one Zone IA
+Intelligent Tiering  --> if i dont know my access pattern then i will go for this pattern.
+
+Glacier  historical data for archival purpose/old data.
+
+Max capacity of Object ---> 5TB you can upload
+at a time you can upload data upto 5 GB.
+
+end point : Unique URL generated every object.
+if it is public any one can access else if its private, then only object owner can access.
+
+
+Versioning : versioning we will enable at bucket level, then it will apply objects ailiable in the bucket.
+once bucket is enable , we cant disable , we can only suspend it.
+
+differntiate between old and new files
+
+Delete marker : when the original file is deleted , delete marker will generate.
+
+How to restore orignial file : by using delete marker.
+
+by default versioing is not enabled in s3, we hae to enable manually. 
+
+Transfer Acceleration: to speed up content data  provided by AWS.
+
+presigned URL : Url will be avilaibe for limited period time.
+
+
+Encription: to secure data
+
+by using life cycle we can store object one storage class to another storage class.
+
+CRR & SRR
+
+if you want to replicate the data in cross region we can go for CRR.
+
+if you want to replicate the data in same region we can go for SRR    .
+
+object Lock :- store objects using a write once read many(WORM) model to help you prevent objects from being deleted or overwritten for a fixed amount of time.
+
+if you enable your bucket using object lock..no one can delete your bucket.
+
+
+Amzon s3 having 3 types of encryptions
+=================================
+
+server side encryption -aws is responsible
+client side encryption - client is responsible
+in-transit encryption - while data moving -https
+
+
+static website hosting using S3
+=================================
+
+1.create a bucket in s3. --bucket name: ashokit.org
+
+- uncheck block public acccess 
+
+2. goto Bucket  -> click on permissions---> edit policy and configure below policy for bucket.
+
+{
+"Version": "2012-10-17",
+"Statement":[
+{
+"Sid": "PublicReadGetObject",
+"Effect": "Allow",
+"Principal": "*",
+"Action": [ "s3:GetObject"],
+"Resource":["arn:aws:s3:::ashokit.org/*"]
+}]}
+
+3. goto objects --> upload static website files 
+4. go to bucket properties and chooze "Static website hosting"
+
+5. it will ddisplay URL, access that URL
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
