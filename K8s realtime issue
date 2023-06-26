@@ -574,10 +574,20 @@ chaoskube
 
 $ chaoskube
 
+$ kubctl create namespace chaoskube
+helm repo add stable https://kubernetes-charts.storage.googleapis.com  -> adding repoisitry to the stable
+
+here choskube is namespace where you are going to install in chaoskube namespace.
+
+helm install --name=chaoskube1 stable/chaoskube --namespace chaoskube --set 'namespace=!kube-system' --set labels=app-purpsose=chaos
+--set interval=20s
+here it means other default kube-system namespaces
 
 
+=============================================================
 
-
+persistent volume data:
+=======================
 
 
 
