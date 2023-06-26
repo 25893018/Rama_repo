@@ -1,0 +1,60 @@
+=================
+To launch Web server:
+
+webserver is used to run web application
+in EC2 we will install web server to run web applications.
+
+create Ec2 instance
+
+whoami 
+pwd
+sudo su
+ 
+sudo yum update -y 
+
+suod yum install -y apache2
+or
+sudo yum install -y httpd
+yum info httpd
+
+
+both are web servers you can install any one
+
+
+sudo systemctl start httpd
+sudo systemctl status httpd
+
+
+
+cd /var/www/html
+
+sudo touch index.html
+sudo chmod 777 index.html
+sudo cat > index.html
+this is rama login to AWS
+
+=============
+this entire above process is called website deployement into server.
+
+********create an another instance using above steps for webserver2 instance 
+
+to check load balancing .
+
+our website is running on one server
+everybody sending same request to same server 
+load will increase on server
+if load increases might server get crash
+
+to overcome this problem we have to reduce burden on server
+to reduce burden on the server we have to distribute the load
+to distribute the load we will use *****Load balancer- ELB
+======================================================
+
+
+create Load balancer and attach above two web server instaces attach to ELB
+
+use DNS domain name to check load balancing working or not
+
+if you are getting error, please check inbound rules.
+
+=======================
