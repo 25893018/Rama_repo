@@ -1,0 +1,54 @@
+sudo -i 
+apt update
+sudo apt install git maven openjdk-11-jdk -y
+
+git --version 
+mvn --version
+java --version
+
+to install jenkins goto jenkins.io url and find latest version.
+kubectl create serviceaccount kubeadminuser
+
+kubectl create clusterrolebinding jenkins-admin --clusterrole=cluster-admin --serviceaccount=default:kubeadminuser
+
+kubectl describe sa kubeadminuser
+
+kubectl describe secret kubeadminuser
+
+KUBE_DEPLOY_SECRET_NAME=$(kubectl get sa kubeadminuser -o jsonpath='{.secrets[0].name}')
+
+kubectl get secret $KUBE_DEPLOY_SECRET_NAME -o jsonpath='{.data.ca\.crt}'|base64 --decode (greater than symbol -- watch video for correct command) dev.crt
+Cat dev.crt
+
+KUBERNETS NLB:
+TARGET PORT: 6443  TCP PROTOCOL
+NETWORK LOAD BALANCER: LISTENER PORT: 443 TCP PROTOCOL
+
+#### HELM INSTALLATION COMMANDS ############
+
+wget https://get.helm.sh/helm-v3.8.0-linux...
+tar -zxvf helm-v3.8.0-linux-amd64.tar.gz
+mv linux-amd64/helm /usr/local/bin/helm
+ln -s /usr/local/bin/helm /bin/helm
+
+
+#### prometheus installation ###############
+
+helm repo add prometheus-community https://prometheus-community.github.i...
+
+helm repo update
+
+helm install kube-prometheus-stack prometheus-community/kube-prometheus-stack
+
+
+########## loki installation #################
+
+helm repo add grafana https://grafana.github.io/helm-charts
+
+helm repo update
+
+helm upgrade --install loki grafana/loki-stack
+
+
+13639 --- DASHBOARD FOR LOGS (DATA SOURCE: LOKI)
+15661 --- DASHBOARD FOR METRICS (DATA SOURCE: PROMETHUES)
