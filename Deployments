@@ -1,0 +1,25 @@
+========================================================
+
+******working with K8's Pods and deployments?  *************************
+========================================================
+
+what is namespaces and how would they be in realtime projects?
+
+understanding of YAML
+
+what are Labels, selectors, annotations and there uses in k8s?
+
+kuberneties security:
+how to configur Authentication and Authorization
+
+
+configuring user access to the cluster and namespace
+how to configure network policies 
+working with kubeconfig and kube contexts
+understanding various TLS certificates for cluster components
+working with RBAC in K8's.
+difference between replica sets an replica controllers
+scaling application with RC, RS and deployments
+Deployment stragies in k8s and what are used in Production deployments?
+deploying with blue/gren and cnary strategies?
+Rolling updates and Rollbacks
