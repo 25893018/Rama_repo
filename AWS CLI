@@ -1,0 +1,11 @@
+pip install --user awscli --> using python
+
+if you hae python3 --> pip3 install --user awscli 
+
+once installed you need add aws credentials
+
+vi .aws/credentials
+
+to get access key/secret key ..> go to aws console -> user there you can found keys ..copy and paste in above path.
+
+aws --version --> to check CLI version
