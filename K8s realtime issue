@@ -369,6 +369,13 @@ services will manage deployments
 using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable 
 name in yaml file, then when do deployment automatically services will connect to app/pods.
 
+kubectl get nodes
+kubectl get pods --all-namespaces | grep -i calico   -> to check calico network namespace running or not
+
+kubectl get deployment -n kube-system  | grep -i calico   --to see calico controller
+kubectl get deploymenet calico-kube-controller --> to see whether calico controller working or not
+kubectl describe deployment calico-kube-controllers -n kube-system
+
 kubectl get pods -o wide   --> it will show ip addresss as well
 kubectl run/apply -f deploy.yaml
 kubectl describe pod twocontainers  --> two containes is a pod name where we mentioned in yaml file under metadata
