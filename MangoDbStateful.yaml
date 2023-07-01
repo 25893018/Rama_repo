@@ -1,0 +1,109 @@
+https://github.com/TrieTreeTechnologies/mongoDB-K8s
+
+stateful set yaml file for mongodb:
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mongo
+spec:
+  selector:
+    matchLabels:
+      app: mongo
+  serviceName: mongo
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: mongo
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - name: mongo
+        image: mongo
+        command: 
+        - mongod 
+        - --bind_ip_all
+        - --replSet
+        - rs0
+        ports:
+        - containerPort: 27017
+        volumeMounts:
+        - name: mongo-volume
+          mountPath: /data/db
+  volumeClaimTemplates:
+  - metadata:
+      name: mongo-volume
+    spec:
+      accessModes: [ ReadWriteOnce ]
+      resources:
+        requests:
+          storage: 1Gi 
+
+kubectl get nodes
+kubens --> to check namespaces
+kubectl create namespace or ns mongo
+kubens mongo --> to switch to mongo
+stateful main adv is if pod is down and up still pod diretly will go and connect same persistent volume without changing the name.
+===================
+kubectl get sc --> to check storage class  if not thre in systm , please note we need to create before deploy stateful set yaml file
+
+kubectl create -f mangoDbStateful.yaml
+
+Apt-get install mongo-clients  --> we need clients install for mango db
+
+kubectl exec -it mongo-0 -- mongo  --> mongo-0 is a pod/container name and mongo is a service name and enter into mongo use this command.
+
+
+steps after deploy:
+============
+kubectl exec -it mongo-0 -- mongo
+
+rs.initiate()
+var cfg = rs.conf()
+cfg.members[0].host="mongo-0.mongo:27017"      --this is primary
+rs.reconfig(cfg)
+rs.status()
+rs.add("mongo-1.mongo:27017")                --this is secondary
+rs.add("mongo-2.mongo:27017")                   --this is secondary
+rs.status()
+exit
+
+kubectl run mango --rm -it --image mongo -- sh   --> to run/create exeteranal mongodb pod with in the cluster , t
+his pod is not avialible in node, but we are creatig from out side and using in our cluster/node
+
+mongo mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo   --> to connect to db
+rs.status()
+
+mongo mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo --eval 'rs.status()' | grep name
+
+mongo mongodb://mongo-0.mongo,mongo-1.mongo,mongo-2.mongo/admin?replicaSet=rs0
+
+show dbs
+
+kubectl expose pod mongo-0 --port 27017 --target-port 27017 --type LoadBalancer  --it means we are accessing mongo-0 pod accessing from outside
+when you expose using loadbalancer.without connecting to mongodb
+
+use inventory
+
+db.books.insertMany([
+   { title: "Moby Dick", author: "Herman Melville" },
+   { title: "The Great Gatsby", author: "F. Scott Fitzgerald" },
+   { title: "One Hundred Years of Solitude", author: "Gabriel Garcia Marquez" }
+]);
+
+db.books.find({}).pretty()
+
+kubectl delete pvc pvcname
+kubectl get pvc
+kubectl delete ns mongo
+
+eksctl get nodegroup cluster --cluster EKS
+
+eksctl delete cluster EKS
+
+
+
+
+
+
