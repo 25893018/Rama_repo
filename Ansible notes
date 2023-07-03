@@ -5,29 +5,44 @@ ansible Installation & Configuration on AWS | Ansible basics | install & configu
 Ansible Installation
 ===================
 
-Ansible is an open source automation platform. It is very, simple to setup and yet powerful. Ansible can help you with configuration management, application deployment, task automation.
+Ansible is an open source automation platform. It is very, simple to setup and yet powerful. Ansible can help you with 
+configuration management, application deployment, task automation.
+
+ansible cotroller (AE)--> linux( managed node) interperter will be python
+for windows --> shell.
+
+Ansibl is a agentless tool, we dont wnt to install clint progremmaes in managed nodes 
+if we install on primary node, that should be ok,
+
+where as other cheff or buffet ..need to install programme on client managed nodes aswell.
+
+
+ansible have control nodes and managed nodes
+control nodes is the primary node and inventory will be there in control node.
+managed nodes like a network nodes(linux, windows, stateful, storage, network ....) that we are implementiong tasks
+
+
+Playbook is nothing simple text yaml file and  a sequence of plays
+plays is not thing but a sequence of tasks
+tasks is nothing but a plan of action. which is used to performed by modules.
+
+1st after instllation ansible
+
+create user always ..dont do it on root as this is not good practice
 
 Prerequisites
 An AWS EC2 instance
-1. Installation steps:
-
-yum update -y 
+1. Installation steps: yum update -y 
 
 2. Add a EPEL (Extra Packages for Enterprise Linux)third party repository to get packages for Ansible
-
 rpm -Uvh https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
 
-3. Install Ansible
-
-yum install ansible -y 
-Check Ansible version
-
-ansible --version
-
+3. Install Ansible :-yum install ansible -y 
+4 . Check Ansible version:- ansible --version
 ==============
 Configuration:
 ================
-1. Create a new user/common user for ansible administration & grant admin access to user (Master and Slave)
+1. Create a new user/common user for ansible administration & grant admin access to user (Master and Slave) you need to create all nodes user
 
 $ useradd ansadmin
 $ passwd ansadmin
@@ -50,20 +65,29 @@ ls -lrta
 
 then restart the service using
 
-$ service sshd restart
+$ service sshd restart   --> you need to do all systems
+or
+systemctl service ssdh
 
 4. Login as a ansadmin user on master and generate ssh key (Master)
 
 su - ansadmin
-ssh-keygen
+ssh-keygen   --just enter to create keys
 
 cd .ssh --> to see your public and private key folders.
 
-5.Copy keys onto all ansible client nodes (Master)
+id_rsa.pub --> is the public key
+id_rsa      --> is the private key
+
+
+5.Copy keys onto all ansible client nodes (from Master to managed nodes)
 
 ifconfig -a to get your system private ip.
 
-ssh-copy-id <target-server>
+ssh-copy-id <target-server ip>   get ip of client node and then you should do from master server
+
+now you can login to target server  using
+ssh targetserver ip --> it will show you after executed ssh-copy-id.
 
 6. Update target servers information on /etc/ansible/hosts file (Master)
 
@@ -79,6 +103,58 @@ Run ansible command as ansadmin user it should be successful (Master)
 ansible all -m ping
 
 -m means module
+if you want to install tree structre to see 
+sudo yum install tree -y
+
+in realtime different team members using ansible.cfg file, so you cannot use same all 5 members at a time
+insted you can use inventory/ansible.cfg file  copy locally as well to use yourself.
+================================
+Steps how to use:
+
+1 go to /etc/ansible and see sudo vi ansible.cfg file
+when you open file you can see first inventory file
+
+#inventory = /etc/ansible/hosts
+
+inventory = /home/ansibleuser/inventory  ..i wil give/create inventory file locally like this from above line.
+
+when you run below command now it will not work becz now your inventory file looking locally and you dont have ips in local inventory file
+
+ansible all -m ping
+
+now lets try creating above inventory file locally now using touch
+
+touch /home/ansibleuser/inventory   ---still when you try pig command it will not work becz ip's are nt yet added to this inventory file.
+
+vi /home/ansibleuser/inventory   --> add here ip addresses for client mechines
+ansible all -m ping  -->now it should work locally as well.
+
+now will copy ansibe.cfg file locally to use insted of touching main file
+
+cp /etc/ansible/ansible.cfg /home/ansibleuser
+
+vi ansible.cfg ..>  now open this file and try to remove local inventory file created an save file  and then 
+check ping command whether ping working or not. also you can see here in this path
+
+/home/ansibleuser --> you can see both inventory and ansible.cfg files
+
+now again copy inventory = /home/ansibleuser/inventory into ansible.cfg file and then try it should work
+and use inventory file locally. kindly note ansible.cfg file not modify in main path and not recommanded.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 =======================
 Ansible simple commands:
 ========================
