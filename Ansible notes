@@ -268,11 +268,122 @@ ansible-playbook -vv vsftpd.yaml   .....
 
 ansible-playbook -C vsftpd.yaml    --> will check whether working or not , but if there are any inter dependencies it willl not work -C
 
+===========
+Variables:
+============
+ansible support variables , that can be used to store values and those variables can be used throuhout programm ..that is called
+dynamic variables.
+
+inventory files are not used variables as those are deprecated and not used.
+
+varaible syntax example:
+
+- hosts: all
+  vars:
+  web_package: httpd
 
 
+sample: user.yaml
+---
+- name: creating a user using sample
+  hosts: all
+  vars:
+- user: rama
+  tasks:
+- name: create a user {{ user }}
+  user:
+    name: "{{user}}"
 
+ansible-playbook -v user.yaml
+how to check user on remote mechine using adhoc command:
+==========================
+ansible all -m shell -a "grep rama /etc/passwd"
 
 ==============================
+variables can be used to host or group of hosts.
+using arrays we can use loops and but in dictiories we cannot
+
+mulit array or list sample:
+==============
+multiarry.yaml
+
+- name: shows lits or known as arrays
+  hosts: ansiblenode1
+  vars_files:
+  - vars/user_list
+  tasks:
+    - name: print array values
+  debug:
+    msg: "User has  {{item.username}} homedirectory {{ user.homedir}} and has shell {{ user.shell}}"
+  loop: "{{users}}"
+- name: print the second array value
+    debug:
+      msg: the second arry item is "{{users[1]}}"
+
+vi vars/users_list.yaml
+ users:
+   - username: rama
+     homedir: /home/rama
+     shell: /bin/bash
+   - username: chehan
+     homedir: /home/chehan
+     shell: /bin/bash
+   - username: rohan
+     homedir: /home/rohan
+     shell: /bin/bash
+
+=========================================================
+how you manage secrets in ansible:
+=====================================
+- using valut we can manage secrets in ansible
+- using ansible_valut we can manage access in secure way. it is used to encrypt and decrypt your files.
+
+ansible-valut create valut.yaml   --> to create encrypted files
+ansible-valut view  valut.yaml --> to view 
+ansible-valut encrypt valut.yaml   -> to encrypt file
+ansible-valut edit valut.yaml    --> to edit
+ansible-valut decrypt valut.yaml 
+ansible-valut rekey valut.yaml    --> to change the password for existing file
+
+example:
+ansible-vault create secretkey.yaml   ( when you enter , it will ask you password , you can give your own password for this file and remember
+after enter password ,  it will go to vi mode to enter your username and password, and then enter details.like below and save it.
+username: rama
+pwhash: password
+
+now if you check your file ;- cat secretkey.yaml ( it will show you in encrypted format)
+
+ cat create-user.yaml file
+
+---
+- name: create a user
+  hosts: all
+  vars_files:
+  - secretkey.yaml
+  tasks:
+    - name: creating user
+      user:
+      name: "{{ username }}"
+      password: "{{pwhash }}"
+
+now run the command: ansible-playbook --ask-vault-pass create-user.yaml    --here it will ask you password and you need to enter every time
+================
+if you dont want to enter password every time , follow below steps
+
+echo ramapassword > key-vautlpass.yaml
+cat key-vaultpass.yaml
+
+you can change perimissions based on your requirment
+
+ansible-playbook --vault-password-file=key-vaultpass create-user.yaml   --> use this command without asking password it will execute playbook
+
+suppose now i want to change the password:
+=========
+ansible-vault rekey key-vaultpass.yaml
+
+
+
+
 
 how to deploy ansible:
 ==========
