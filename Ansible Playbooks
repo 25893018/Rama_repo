@@ -1,0 +1,96 @@
+1. delpoy web server 
+webserver.yaml
+---
+- name: enable webserver
+  hosts: ansiblenode1
+  tasks:
+- name: install httpd and firewalld
+  yum:
+   name: 
+     - httpd
+     - firewalld
+  state: latest
+- name: install welcome page
+  copy:
+  content: hello world
+  dest: /var/www/html/index.html
+- name: start web services
+  service:
+    name: httpd
+    enabled: true
+    state: started
+- name: start firewalld services
+   service:
+      name: firewalld
+      enabled: true
+      state: started
+- name: open firewalld
+  firewalld:
+    service: httpd
+    permanent: true
+    state: enabled
+    immediate: yes
+
+- name: webserver acces
+  host: localhost
+  become: no
+  tasks:
+    - name: connect to the web server
+      url:
+      url: http://ansiblenode1
+      return_content: yes
+
+
+============================
+
+we cannot undo any thing in ansible, if you want to remove/undo something you need to write different playbook and deploy
+
+[servera]$ cat << EOF > deploy-webserver.yml
+---
+- name: Demo playbook to test callback plugin - Deployment
+  hosts: serverb
+  tasks:
+    
+    - name: Install httpd package
+      dnf:
+        name: httpd
+        state: latest
+    
+    - name: Start and enable httpd service
+      service:
+        name: httpd
+        enabled: true
+        state: started
+
+    - name: Create a custom index.html file
+      copy:
+        dest: /var/www/html/index.html
+        content: |
+          Enable SysAdmin Demo:
+          Ansible Profiling with Callback Plugin
+          Custom Web Page
+====================
+---
+- name: Demo playbook to test callback plugin - Remove webserver.yaml
+  hosts: serverb
+  tasks:
+
+    - name: Stop and disable httpd service
+      service:
+        name: httpd
+        enabled: false
+        state: stopped
+
+    - name: Remove httpd package
+      dnf:
+        name: httpd
+        state: absent
+  
+
+You should have the following four files in your demo(specific) directory:
+
+[servera]$ ls -1
+ansible.cfg
+deploy-webserver.yml
+hosts
+remove-webserver.yml
