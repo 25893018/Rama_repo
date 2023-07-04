@@ -5,33 +5,285 @@ ansible Installation & Configuration on AWS | Ansible basics | install & configu
 Ansible Installation
 ===================
 
-Ansible is an open source automation platform. It is very, simple to setup and yet powerful. Ansible can help you with 
+Ansible is an open source automation tool. It is very, simple to setup and yet powerful. Ansible can help you with 
 configuration management, application deployment, task automation.
+
+ansible is not requried to run any agent on client mechines - agent less 
+ansible can connect remote hosts using sshkey gen   --> can use without any software  installtion
+openrm for windows.
+Ansible uses yaml files to write scripts
+very flexible to  use
+modules --system defined modules  --> if you dont want to use system defined modules you can also write custom modules
+custom modules.
+Ansible engine(AE) can run/manage your playbooks and easy to write playbooks   
+ansible playbooks easily reable and easy to change.
+AE will have (inventory,modules,Apis, plugins wil have ansble engine)
+playbook can write using modules, conditions and then commands
+=======
+
+module is nothing but a library files or asking ansible to do/run using adhoc commands.
 
 ansible cotroller (AE)--> linux( managed node) interperter will be python
 for windows --> shell.
 
 Ansibl is a agentless tool, we dont wnt to install clint progremmaes in managed nodes 
-if we install on primary node, that should be ok,
+if we install on primary node, that should be ok.
 
 where as other cheff or buffet ..need to install programme on client managed nodes aswell.
 
 
 ansible have control nodes and managed nodes
-control nodes is the primary node and inventory will be there in control node.
+master/control nodes is the primary node and inventory will be there in control node.
+inventory/hosts file will have all ip addresses of client mechinesand as well FQDN(fully qualifid domain names)
 managed nodes like a network nodes(linux, windows, stateful, storage, network ....) that we are implementiong tasks
 
+ansible.cfg file can use for to manage user passwords/parameters or  you can give here your inventory locaion.
 
+****using ssh we can coonect master to client node mechines
+
+playbook can write using modules, conditions and then commands
 Playbook is nothing simple text yaml file and  a sequence of plays
 plays is not thing but a sequence of tasks
 tasks is nothing but a plan of action. which is used to performed by modules.
+
+Inventory is nothing but a list of remote/managed hosts. we have two types of inventory
+
+static inventory /defulat invernoty are same  --> /etc/ansible/hosts -->default inventory file and this is a global file and can use all users.
+this etc file we need root access to access this path/file in realtime,so we cannot use it in realtime.
+also we cannot keep all project files in above path becz this is a global file and can use all users. , 
+insted we can create inventory file in our project location. best way in production to use.
+
+we can give in static/inventory file :- inventory/hosts file will have all ip addresses of client mechines
+and as well FQDN(fully qualifid domain names)
+
+same host we can use multiple groups in /etc/ansible/host file
+
+example:
+[linux server] server a,server b  (or) [linux server] server[a:d] --> a:d means range from a to d (a,b,c,d ..like) you can define like this as well
+(or) 192.165.180.[1:00] --> it means i am using 100 ip servers
+(or) 192.165.[250:252]:[1:100]  --> it means total 300 ip serers are using...you can define groups like this
+
+[db server ]  --> server c 
+[web] --> server a and server b
+
+example command to check all web server ip's
+===============
+ansible --list-hosts web   --> it will fetch all web server list
+ansible --list-hosts web 
+ansible --list-hosts all   --> it will show all servers
+
+how to create nested groups:
+======
+[India:childern]
+db server
+web
+ansible --list-hosts India   --> it will show you dbserver ad web details  ( this is also one type of group)
+
+suppose if you decelar just servere  separately without any under group, it will deiplay usig below command
+servere --> in host file
+ansible --list-hosts ungrouped
+
+if we want to see all groups --> ansible-inventory --graph  ( this comandd is for default group)
+if we want to see specific to your project in your project folder --> ansible-inventory --graph -i inventory
+
+simple one project :  how to crete inventory file using in your project 
+===========
+my project name called citi, so i can create citiinventory file inyour project
+
+PRoject details
+hostame  purpose  location Env
+
+TT1       web     hyd       dev
+tt2      web      hyd       test
+tt3      web      vizg      prod
+tt4      web      blr       prod
+Tt5      db       texas     Prod
+
+cd citi
+cd citiinventory
+===================
+
+[web server] web 
+123.45.45.[a:c]
+[db server ]  db
+[Dev]
+[test]
+[prod]
+
+[India:childer]
+hyd
+vizg
+blr
+[Us:childern]
+texas
+
+======================================
+configuratio files in ansible
+===================================
+Ansible.cfg is a configuration file in ansible
+there are two sections in config files --> one is default and second one is --> priviliage_escaltion
+
+in priviliage_escaltion how to run commands for  managed hosts , we will specify here.
+
+we can see three different paths we can see in ansible.cfg files
+
+ansible --version
+
+cd /etc/ansible/ansible.cfg
+p-3( prioirity 3) in this ansible.cfg file you can see default inventory files./default location
+
+p2--2nd one is specfic to user and when you created ~/.ansible.cfg file it will locate and show you when you run below comand
+
+ansible --version
+
+P1 --Third one is for your project in location --> go to your project path and create vi ansible.cfg file and then run below command
+ansible --version
+
+******* export ANSIBE_CONFIG = /tmp/ansible.cfg --> this path/command will override all above three priority config files.
+
+ansible --version
+
+ansible.cfg file for your locall project to use:
+----------------
+[defaults]
+inventory = inventory
+remote_user = ansible
+host_key_checking = false
+deprecation_warning = false
+
+[privilege_escalation]
+become = true
+become_method = sudo
+become_user = root
+become_ask_pass = false
+
+==========================================================================
+
+help:
+====
+Ansible-doc -l  this comad will give you all ansible modules
+ansible-doc -l | wc -l
+ansible-doc -l | grep -i win_    
+
+ansible-doc aws_s3
+==================
+
+Adhoc commands
+==========
+to create user : ansible all -m user -a "name=citibank"   when you run first time it will show you changed 
+=============
+and you need to run second time same command then it will show you success.
+
+ansible all -m user -a "name=citibank state=absent"    --> remove user
+ansible all -m command -a "id citibank" to check whether user is aviliable or ont
+Ansible-doc all
+
+Module:
+========= 
+have 4 types :- stable , priview --> going to change in next versins , deprecated ---it should not be used and remove( its retired)
+shell commands (>> << > < = % ) these are arbitratory commands
+
+ansible all -m ping
+
+Essential regular modules or reqular to use:
+===============
+ansible all -m ping  --> it will heck python istalled or not
+
+ansible all -m service
+
+please note module can be run module can be run using RAW without python
+ansible all -m ping 
+ansible all -m command -a "/sbin/reboot -t now"   --to restart
+ansible ansiblenode1 -m copy -a 'content="HI Subscribers" dest=/etc/motd'
+
+here we are using two aru=gurments and copying data one server to another server usng adhoc commnd module
+
+ansible is idompotent ..so it wont changes any other other arguments when you run command second time.
+
+how to check data copied in remote server
+======
+ansible ansiblenode1 -m shell -a 'cat /etc/motd'
+
+How to install python using  RAW in remote/managed nodes using adhoc command/without connecting remote server
+===================
+ansible -u root -i inventory ansiblnode2 --ask-pass -m raw -a 'yum install python3 -y'
+
+Playbooks:
+==================
+Ansible playbooks are idompotenet
+playboks start with --- lines and end with --- lines 
+
+next always  start with - name  and then after argurments we want and then tasks 
+
+Syntax fo playbook:
+=====
+----
+- name
+arguments
+tasks
+-name
+module
+arguments.....
+tasks
+-name
+mdoule
+arguments
+tasks
+
+...(three dots)
+
+using playbooks , we can run multiple tasks where as using adhoc modules we run single or few tasks for testing to recommmand
+
+how to write simple playbook: vi vsftpd.yml
+============
+---
+- name: vsftpd
+  hosts: ansiblenode1
+  tasks:
+- name: install vsftpd
+  yum: name=vsftpd
+- name: enable vsftpd
+  service: name=vsftpd enabled=true
+- name: create readme file
+  copy: 
+  content: "Hi subscribers"
+  dest: /var/ftp/pub/README
+  force: no
+  mode: 0444
+...
+
+ansible-runbook vsftpd.yml
+
+syntax cheking for yaml:
+====================
+ansible-playbook --syntax-check vsftpd.yaml    
+
+-v --> show the tasks resutls
+-vv --> results + configuration
+-vvv --> it will show connections about managed hosts.
+-vvvv --> it will show about plugins
+
+ansible-playbook -v vsftpd.yaml  
+ansible-playbook -vv vsftpd.yaml   .....
+
+ansible-playbook -C vsftpd.yaml    --> will check whether working or not , but if there are any inter dependencies it willl not work -C
+
+
+
+
+
+==============================
+
+how to deploy ansible:
+==========
 
 1st after instllation ansible
 
 create user always ..dont do it on root as this is not good practice
 
 Prerequisites
-An AWS EC2 instance
+An AWS EC2 instance  --> we  need one master node and two managed nodes on aws virtual mechines.
+
 1. Installation steps: yum update -y 
 
 2. Add a EPEL (Extra Packages for Enterprise Linux)third party repository to get packages for Ansible
