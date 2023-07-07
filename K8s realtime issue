@@ -54,42 +54,9 @@ but k8s will not recommand more than one container in pods.
 - pod is have IP address and container have port numbers in K8's.
 
 if pod is deleted and again configure IP will change if we using Kind:pod
-===================
-
-
-  
-   
-   
-  
-  
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+================
 
 https://komodor.com/learn/how-to-fix-createcontainerconfigerror-and-createcontainer-errors/
-
 
 ConfigMap is missing—a ConfigMap stores configuration data as key-value pairs.Identify the missing ConfigMap and create it in the namespace, 
 or mount another, existing ConfigMap.
@@ -148,7 +115,12 @@ unfortunatly delete pod .. it will create new pod automatically.
 kubectl get all 
 kubectl delete pod pod name
 kubectl get deployment
-kubectl edit deployment deploymentname   ---to edit
+kubectl edit deploy
+
+
+
+
+ment deploymentname   ---to edit
 kubectl scale
 kubectl autoscale
 kubectl attach
@@ -165,15 +137,17 @@ yaml is used for to define resources in k8's
 yaml file you can keep in github and use.
 
 depolyments : 
-================Deployment is a higher-level concept that manages ReplicaSets and provides declarative updates to Pods along with a lot of other useful features(
-monitor pod always). Therefore, we recommend using Deployments instead of directly using ReplicaSets, unless you require custom update orchestration 
+================Deployment is a higher-level concept that manages ReplicaSets and provides declarative updates to Pods along with a 
+lot of other useful features(monitor pod always). Therefore, we recommend using Deployments instead of directly using ReplicaSets, 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     unless you require custom update orchestration 
 or don't require updates at all. deployment is nothing but a suppose if pod is mistakenly deleted ,it will brimg up pod automatically.
 
 replicat set is nothing but a you can create number of pods 
 =========
 example: replicat set =3 means it will create 3 pods at a time with that mentioned image.
 *****deployment have two types of methods to create/update versions:
-recreate --> in this method we have down time to recreate pods. you need to bring down the pods to bring up another version pods. so there is a down time here.
+recreate --> in this method we have down time to recreate pods. you need to bring down the pods to bring up another version pods. 
+so there is a down time here.
 ========
 rollingout  --> in this method it will not down all pods at a time insted first pod will be down and then version will be update.
 =========
@@ -184,7 +158,8 @@ default will be in k8's rollingout method apply.
 kubectl create -f nginxdeploy.yml   --> this is initial creation 
 kubectl get deployment.apps/nginxdeploy
 
-kubectl apply -f nginxdeploy.yml    --> this command is for when you are updating version changes/updates for continusly to scalup or down pods
+kubectl apply -f nginxdeploy.yml    --> this command is for when you are updating version changes/updates for continusly to scalup 
+or down pods
 kubectl delete -f nginxdeploy.yml
 kubectl get deployment.apps/nginxdeploy
 kubectl get pods
@@ -197,7 +172,7 @@ you can see now difference old version to new version pods are updated.
 
 suppose if i want to move previous version use below rollout command 
 
-kubectl rollout undo deployment//nginx   --> to move old /previous version
+kubectl rollout undo deployment/nginx   --> to move old /previous version
 kubectl get replicaset
 
 supoose if you want to increse replicas use below command: increase/scaleup replicas in yaml file and then use apply command to update
@@ -217,7 +192,7 @@ kubectl get resources -o yaml > myfile.yaml  --> to  get another resource info
 kubectl api-resources
 kubectl api-versions
 
-kubectl pod.spec
+kubectl pod.spec 
 kubectl pod.volume
 kubectl get pods -o wide
 
@@ -276,30 +251,40 @@ horzental scaling and load balancing :- k8's can scale up and scale down the app
 
 Docker Swarm can’t do auto-scaling (as can Kubernetes); 
 Docker Swarm doesn’t have a GUI; Kubernetes has a GUI in the form of a dashboard
-Docker Swarm does automatic load balancing of traffic between containers in a cluster, while Kubernetes requires manual intervention for load balancing such traffic.
+Docker Swarm does automatic load balancing of traffic between containers in a cluster, 
+while Kubernetes requires manual intervention for load balancing such traffic.
 Docker requires third-party tools like ELK stack for logging and monitoring, while Kubernetes has integrated tools for the same
-Docker Swarm can share storage volumes with any container easily, while Kubernetes can only share storage volumes with containers in the same pod
-Docker can deploy rolling updates but can’t deploy automatic rollbacks; Kubernetes can deploy rolling updates as well as automatic rollbacks
+Docker Swarm can share storage volumes with any container easily, 
+while Kubernetes can only share storage volumes with containers in the same pod
+Docker can deploy rolling updates but can’t deploy automatic rollbacks; K
+ubernetes can deploy rolling updates as well as automatic rollbacks
 
-3. 
+3. What is a Kubernetes Ingress Controller?
+A Kubernetes Ingress Controller is a software component responsible for implementing the rules specified in the Ingress resource.
+It acts as a gateway between external traffic and services running within a Kubernetes cluster, enabling seamless routing 
+and service exposure.
 
-What is a Kubernetes Ingress Controller?
-A Kubernetes Ingress Controller is a software component responsible for implementing the rules specified in the Ingress resource. It acts as a gateway between external traffic and services running within a Kubernetes cluster, enabling seamless routing and service exposure.
-
-Why do I need an Ingress Controller?
-An Ingress Controller simplifies the process of managing external traffic and service exposure in Kubernetes. It provides advanced routing capabilities, load balancing, SSL termination, and security features, making it easier to expose services to the outside world while ensuring scalability and reliability.
+Why do I  need an Ingress Controller?
+An Ingress Controller simplifies the process of managing external traffic and service exposure in Kubernetes. 
+It provides advanced routing capabilities, load balancing, SSL termination, and security features, 
+making it easier to expose services to the outside world while ensuring scalability and reliability.
 
 What are some popular Ingress Controllers?
-Some widely used Ingress Controllers in the Kubernetes ecosystem include Nginx Ingress Controller, Traefik, and HAProxy Ingress Controller. These controllers offer various features and integrations, allowing you to choose the one that best fits your requirements.
+Some widely used Ingress Controllers in the Kubernetes ecosystem include Nginx Ingress Controller, Traefik, and HAProxy Ingress Controller. 
+These controllers offer various features and integrations, allowing you to choose the one that best fits your requirements.
 
 What benefits do Ingress Controllers offer?
-Ingress Controllers provide several benefits, including simplified service exposure, advanced traffic management, load balancing, enhanced security through SSL termination and authentication mechanisms, scalability, and flexibility to adapt to changes in the Kubernetes cluster.
+Ingress Controllers provide several benefits, including simplified service exposure, advanced traffic management, load balancing, 
+enhanced security through SSL termination and authentication mechanisms, scalability, and flexibility to adapt to changes in the Kubernetes 
+cluster.
 
 Can I use multiple Ingress Controllers in a Kubernetes cluster?
-While it is technically possible to use multiple Ingress Controllers in a Kubernetes cluster, it is generally recommended to choose one as the primary controller to avoid conflicts and ensure consistent routing rules and behavior.
+While it is technically possible to use multiple Ingress Controllers in a Kubernetes cluster, 
+it is generally recommended to choose one as the primary controller to avoid conflicts and ensure consistent routing rules and behavior.
 
 Are Ingress Controllers compatible with cloud-based load balancers?
-Yes, Ingress Controllers can work with cloud-based load balancers. In such cases, the Ingress Controller acts as an interface between Kubernetes and the cloud load balancer, providing additional routing and management capabilities specific to Kubernetes services.
+Yes, Ingress Controllers can work with cloud-based load balancers. In such cases, the Ingress Controller acts as an interface 
+between Kubernetes and the cloud load balancer, providing additional routing and management capabilities specific to Kubernetes services.
 
 
 Create a new Kubernetes namespace
@@ -319,11 +304,12 @@ $ kubectl create -f my-namespace.yaml
 The command to display all namespaces in the cluster is:
 $ kubectl get namespace
 How to switch between Kubernetes namespaces?
-When addressing namespaces, actions must include the “-namepsace=” option in the command. Because this can be time-consuming, the default namespace can be modified by using the kubectl config command to set the namespace in the cluster context.
+When addressing namespaces, actions must include the “-namepsace=” option in the command. Because this can be time-consuming, 
+the default namespace can be modified by using the kubectl config command to set the namespace in the cluster context.
 
 To switch from the default namespace to ‘K21,’ 
 for example, type: 
-command:- kubectl config set-context –current –namespace=K21. This will make ‘K21’ the default namespace for all future kubectl commands.
+command:- kubectl config set-context -–current -–namespace=K21. This will make ‘K21’ the default namespace for all future kubectl commands.
 
 How to rename a Kubernetes namespace?
 Renaming a Kubernetes namespace is not recommended, so choose namespaces (other than the default) with caution.
@@ -334,8 +320,9 @@ $ kubectl delete namespaces <name>
 
 Because deletion is an asynchronous activity, the namespace will appear as ‘terminating’ until it is deleted.
 
-Warning⚠️:  The deletion of a namespace is the final act. Everything in the namespace will be deleted, including all services, running pods, and artifacts.
-Garbage collection will be performed on anything that previously existed in that namespace. Before performing this action, ensure that everything in the namespace has been deleted.
+Warning⚠️:  The deletion of a namespace is the final act. Everything in the namespace will be deleted, including all services, running pods,
+and artifacts.Garbage collection will be performed on anything that previously existed in that namespace. 
+Before performing this action, ensure that everything in the namespace has been deleted.
 
 Namespace:
 =========
@@ -354,6 +341,7 @@ kubectl get pods -n trietree   --> here n attribute will go and check in that tr
 kubectl get all -n trietree   ==> to show all resource info in that namespace trietree
 kubectl get ns --> ns is short form of namespace
 
+
 to switch default namespace to specific namespace
 kubectl config set-context --current --namespace=default
 kubectl config set-context --current --namespace=trietree
@@ -368,7 +356,7 @@ pods will create/manage using deployments(deployment.yaml)
 services will manage deployments
 using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable 
 name in yaml file, then when do deployment automatically services will connect to app/pods.
-
+ 
 kubectl get nodes
 kubectl get pods --all-namespaces | grep -i calico   -> to check calico network namespace running or not
 
@@ -381,9 +369,10 @@ kubectl run/apply -f deploy.yaml
 kubectl describe pod twocontainers  --> two containes is a pod name where we mentioned in yaml file under metadata
 to see more details use describe and use created two containers in pod using same ip
 
-kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a container name and twocontainers is a pod name. we are checking here busybox1 container
-ip 
-kubectl exec -it twocontainers -c busybox2 /bin/sh  -->  here busybox2 is a container name and twocontainers is a pod name. we are checking here busybox2 container ip 
+kubectl exec -it twocontainers -c busybox1 /bin/sh   --> here busybox1 is a container name and twocontainers is a pod name. 
+we are checking here busybox1 containerip 
+kubectl exec -it twocontainers -c busybox2 /bin/sh  -->  here busybox2 is a container name and twocontainers is a pod name. 
+we are checking here busybox2 container ip 
 
 it will be same ip for both containers, so in pod if you have multiple containers, ip will be same for all containers.
 
@@ -551,7 +540,7 @@ kubernetes API management: API is nothing but what ever resoucres are making it 
 using kubeproxey or curl we can access api's where using in yaml files.
  yaml file --> aPI -->api server (will provide all apis and using kubeproxey we can access all apis)
 if you want to access api's you need authorized certificates like public, private, CA authorized certificates(mostly via TLS security). transfort layer security
-
+      
  normally in k8's directly using kubeproxey or curl we can access api's where using in yaml files insted of certications.
 to fetch details from API server:
 ******to expose port/service
@@ -573,8 +562,9 @@ Ingress exposes HTTP and HTTPS traffic routes from outside the cluster to servic
 Traffic routing is controlled by rules defined on the Ingress resource.
 ==========    
 ***you can expose services using clusterip , nodeport, load balancer and ingress.
-using ingress, you can redirect services from one page to another page easily
-h aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaamaaaaaaaaaaaaaaaaexample:- i have one application called api.com , in that i have publisher page, testing page, developer page....using same server(api.com) i want to redirect 
+using ingress, you can redirect services from one page to another page 
+aexample:- i have one application called api.com , in that i have publisher page, testing page, developer page....
+using same server(api.com) i want to redirect 
 all pages one by one or services , we can use for ingress.
 
 using nodeport you cannot expose service/applications publicly, this is within the application
@@ -598,8 +588,8 @@ minikube ip
 
 rollout of deploymets:
 =======================
-kubectl create deployment my-app --image=nginx --dry-run -o yaml > nginx-deployment.yaml  -> it wll create nginx pod  and also create yaml file
-to see content in file.
+kubectl create deployment my-app --image=nginx --dry-run -o yaml > nginx-deployment.yaml  -> it wll create nginx pod  
+and also create yaml file to see content in file.
 
 kubectl run -f nginx-deployment.yaml 
 kubectl get deployment
@@ -708,6 +698,7 @@ Kubernetes :
 1) what is taint and toleration 
 2) node affinity an pod affinity 
 3) how to check the logs of a pod or deployment?
+
 4) how to check how many pods are running
 kubectl get pods -A
 kubectl get pods -all-namespaces -A
@@ -720,6 +711,15 @@ before start the actual container , init container will start to initialize the 
 will start.
 
 7) what is statefullset
+stateful sets:---
+==============
+A Statefulset is a Kubernetes controller that is used to manage and maintain one or more Pods.
+
+normallyy in deployment pods will create all at a time when we create. if any time pod is down and up again IP/hostname will change ,
+that will be the problem in production. to avoid this we can use stateful sets. when you use statfulsets , it will create pods one by one 
+and create separate id for each pod. hence it will not change ip/hostname using stateful sets.
+
+$ kubectl delete statefulsets zk   -> zk is statefulset name giveen in yaml file.
 
 8) what is ingress
 inress is an api object which provides the routing traffic rules to manage external users access to the services in k'8s cluster
@@ -730,15 +730,35 @@ typically via http or https:
 10) difference between secret and configmap
 11) what is livenessprobe and readynesspeobe
 12) how to access other pods in a cluster
-13) what is a pod
+13)   
 14) how you will make sure that the database should start first and then application
 15) Types of storage class used in your project
+
 16) difference between statefullset and stateless
+Stateless Protocol	Stateful Protocol
+Stateless Protocol does not require the server to retain the server information or session details.	
+Stateful Protocol require server to save the status and session information.
+In Stateless Protocol, there is no tight dependency between server and client.	
+In Stateful protocol, there is tight dependency between server and client
+The Stateless protocol design simplify the server design.	
+The Stateful protocol design makes the design of server very complex and heavy.
+Stateless Protocols works better at the time of crash because there is no state that must be restored, 
+a failed server can simply restart after a crash.	
+Stateful Protocol does not work better at the time of crash because stateful server have to keep the information of the status 
+and session details of the internal states.
+Stateless Protocols handle the transaction very fastly.	Stateful Protocols handle the transaction very slowly.
+Stateless Protocols are easy to implement in Internet.	Stateful protocols are logically heavy to implement in Internet.
+Scaling architecture is relatively easier.	It is difficult and complex to scale architecture.
+The requests are not dependent on the server side and are self contained.	The requests are always dependent on the server side.
+To process different information at a time , different servers can be used.	To process every request , the same server must be utilized.
+Example of Stateless are UDP , DNS , HTTP , etc.	Example of Stateful are FTP , Telnet , etc.
 17) describe kubernetes architecture
 18) difference between PV and pvc
 19) 2 containers are running inside a pod if one container goes down then will it affect other running container
 20)  Update the password in secret without restarting the pod or deployment ,is it possible ?
 21) how to rollback the deployment?
+kubectl rollback undo centos/deployment
+
 22) what is the reason for pod eviction?
 22) pod is in pending state ,what are the possible reasons?
 23) how you will make sure that in rolling update strategy 2 pods are always available?
@@ -747,6 +767,7 @@ typically via http or https:
 26) how you will make sure that pod should be running on a specific node?
 27) how to check what are the activities performed by the container while creating the pod
 28) how to get the ip of a pod ?
+kubectl get pod
 29) which network plugin you are using?
 30) how you are monitoring the kubernetes cluster and the containers
 31) Job should be terminated after 40 seconds ? ActiveDeadLineSeconds: 40
