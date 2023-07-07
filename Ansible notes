@@ -504,8 +504,7 @@ check ping command whether ping working or not. also you can see here in this pa
 now again copy inventory = /home/ansibleuser/inventory into ansible.cfg file and then try it should work
 and use inventory file locally. kindly note ansible.cfg file not modify in main path and not recommanded.
 
-
-
+register:
 
 
 
