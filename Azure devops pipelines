@@ -1,1 +1,67 @@
 classis pipeline using maven:  https://www.youtube.com/watch?v=coWZWmlfzKM
+
+deploy java web application on Azure on windows:
+===================================
+Prepare infastructure:
+====================
+
+1. we need web app 
+java - 8 apache tomact 9.0
+select windows
+
+2. create my sql 
+
+after creating my sql --> go to connection security --> allow access to azure services --> keep yes
+
+and in properties folder --> take server url and server connetion
+
+go to web app --> undersettings--> now click on configuration folder :-- select mysql and mqsql path details
+
+Prepare source code repository:
+=============================
+
+project url from git hub: https://github.com\nextopsvideos\MyShuttle
+
+3, now we need source code repositiry from git
+
+install git for windows on your system to run git commands
+
+in one of the drive, you can create jave web app folder and clone app from git 
+ git clone git url
+
+remove .git folder from web application project
+then run git init command on command prompt
+
+Git init
+git add . (.dot)saving all folders into local repository)
+git status 
+git commit -m " java web app code added"
+
+git remote add origin url   -->to move java project azure repositiory
+git push -u origin --all
+
+create build pipeline now:
+=======================
+
+-DskiptITs --settings/maven/settings.xml  to skip test cases when packagig maven
+
+maven:
+copyfilesto: in source folder : $(Build.sourceDirectory)
+                contents: **/target/.war
+                             *.sql
+                  target folder: $(Build.ArtifactStagingDirectory)
+
+publish artifact.drop:
+
+              in Path to publish: $(Build.ArtifactStagingDirectory
+
+then click on queue and then
+now go back to pipeline folder and click run pipeline 
+
+
+
+
+
+
+
+
