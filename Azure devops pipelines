@@ -59,10 +59,30 @@ then click on queue and then
 now go back to pipeline folder and click run pipeline 
 
 ====================================================================
-Azure devops with yaml files using AKS & ACR and SQL
+      Azure devops with yaml files using AKS & ACR and SQL
 =======================================================================
 https://www.youtube.com/watch?v=WFQmTk4q9js
+1. prepare source code repository
+         create resource group
+         create virtual network
+        serach kubernetes services to create cluster
+         node size take standared B2s(2cpus and 4 gb memroy)
+         node cuount range (1 to 3)
 
+     create SQL Database
+    import source code using git
+kubernetes extension and replace tokens install using market place
+
+when yu download extensios yu need to enable under policies --> third party application access via auth and ssh authentication
+
+prepare the infrastructure
+create build pipeline
+     
+create release pipeline
+enable CI/CD
+run the pipeline
+verify deployment
+=====================================
 
 
 
