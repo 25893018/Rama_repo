@@ -1,4 +1,169 @@
-1. delpoy web server 
+
+Ansible is divident into 3 tasks:
+1. inventory  --> a list of hosts or group of hosts
+the default location for the host inventory file is /etc/ansible/hosts
+
+the ansible* commands will use a different host inventory file when they are 
+used with the --inventory PATHNAME option, -i PATHNAME for short.
+
+2. modules --> modules are the programes that perform the actual work of the 
+tasks of a play. core modules are the modules that come bundled with ansible.
+they are over 400 core modules.
+
+3. tasks  ---> the goal of a play is to map a group of hosts to some well 
+defined roles, represented by things ansible calls tasks.
+
+Syntax:
+
+1. ansible playbooks are written using the YAML (Aint Markup language)
+so create a file with .yml or yaml extension.
+
+2. yaml files optionally begin with a three dash (...)     
+next immediate line starts with single dash ( - )	   
+name is optional here.
+3. hosts expect value like all or group.
+4. do you want to become a root on target server uses become
+5. what action do you want to perform? specify under tasks
+6. we are using this playbook to install nginx.
+
+https://www.yamllint.com/ is validate your yaml syntax:
+-------------------------------------
+or 
+yum list installed | grep nginx
+ps -Aef | grep -i nginx
+
+******if we want to create our own host inventory file: then goto /etc/ansible/hosts
+ip addr command to get the ipaddress of the server
+
+sudo vi hosts  -> give Ipaddress of that server in hosts file where you want to install nginx:
+cat hosts
+
+******if it ask password while executing , you can update visudo to avoid password.
+this should be done under root:
+
+visudo
+ansadmin ALL=(ALL) NOPASSWD: ALL
+
+then move back to user if you are created dedicated user:
+useradd ansadmin
+su -admin
+
+*****to execute your palybook this below command
+
+ansible-playbook -i hosts nginx-install.yml --check
+
+-i is a inventory here
+--check it will validate your command will work or not.
+ once validation is done 
+
+you run command to install nginx:
+
+ansible-playbook -i hosts nginx-install.yml
+
+check now whether nginx installed or not now.
+
+yum list installed | grep nginx
+ps -Aef | grep -i nginx
+
+=============================
+syntax:
+---
+- name: description
+ hosts: all
+ become: true
+
+ tasks:
+
+example to install nginx: 
+vi nginx-install.yml
+=========================
+- name: nginx install & start servers
+  hosts: all
+  become: true
+
+  tasks:
+  - name: install nginx
+  yum:
+   name: nginx
+   state: latest
+  
+  -name: start nginx
+  service:
+   name: nginx
+   state: started
+
+============================
+
+2 Scenioro : Ansible vault with realtime example | Using Ansible vault for git
+
+ansible valut is used to encrypt your data in a file:
+
+====================
+
+1. first create a repository in git and then clone in server.
+
+repository name is called valut:
+
+while cloning..usueally git username and password we should provide url itself like below:
+
+how to clone in server: git clone https://25893018:Chehan01*@github.com/25893018/Vault.git
+
+if you want latest updates from git use : git pull
+
+
+vi ansible-vault.yml
+=========================
+- name: ansible playbook to test a valut
+  hosts: all
+  become: true
+
+  tasks:
+  - name: clone a repo
+  git:
+   repo: https://25893018:Chehan01*@github.com/25893018/Vault.git 
+   dest: /opt/ansadmin/test-vault
+
+ save and execute:
+
+ansible-playbook -i hosts ansible-vault.yml --check
+ansible-playbook -i hosts ansible-vault.yml
+
+insted of giving password in git url and exposing to eveyone 
+
+we can encript our password and run valut file.
+
+$ ansible-vault view valut-pass.yml
+
+vi ansible-vault.yml
+=========================
+- name: ansible playbook to test a valut
+  hosts: all
+  become: true
+  vars_files:
+   - valut-pass.yml
+  tasks:
+  - name: clone a repo
+  git:
+   repo: https://25893018:{{ password }}@github.com/25893018/Vault.git 
+   dest: /opt/ansadmin/test-vault
+
+{{ password }} is a varibale and add varible file in yml file
+
+$ ansible-playbook -i hosts ansible-valut.yml --ask-valut-pass
+
+password will ask ..give here: and then your repoisitry will clone all servers
+
+it will execute and clone the repositiry for all server mentined in host file.
+
+************another way also you can encrypt password for your data
+
+vi pass.yml
+
+Chehan01*
+
+$ ansible-playbook -i hosts ansible-valut.yml --vault-password-file pass.yml
+
+now it willl not even ask password becz it will take password pass.yml file and execute 1. delpoy web server 
 webserver.yaml
 ---
 - name: enable webserver
