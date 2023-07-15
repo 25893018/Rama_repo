@@ -1,0 +1,46 @@
+
+
+useually manually jobs run , insted running jobs manully , we can use piple line to run jobs automatically.
+
+Declarative pipe line
+scripted pipe line
+
+Declarative pipeline:
+
+Example: in pipeline section you can write  using pipeline script.
+
+pipeline{
+    agent any
+    stages{
+        stage("Hello"){
+            steps{
+                echo "welcome to jenkins pipeline"
+            }
+        }
+   }
+}
+
+2nd example:
+
+pipeline{
+    agent any
+    stages{
+        stage("Hello"){
+            steps{
+                git credentialsId: 'Key-cred', url: 'https://github.com/25893018/Rama_repo.git'
+            }
+        }
+   }
+}
+
+
+
+if you need to run pipe line you need to install pipeline: Pipeline: Declarative Agent API
+
+go to manager jenkins --> manage plugins -->  Pipeline: Declarative Agent API  if not done already.
+
+after install pipeline write simple echo script like above.
+
+create pipe line job and execute:
+
+
