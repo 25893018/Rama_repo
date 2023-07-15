@@ -1,0 +1,94 @@
+
+======================================================================
+
+Master/Slave concept:
+
+the main purpose of the master/slave concept is distributing the builds
+jenkins --> lot of jobs to create and load increase --> more cpu/memory/network utilization.
+
+to overcome this problem master /slave concept came. 
+the communication between master and slave is SSH
+the communication between master and slave protocol is TCP/IP
+
+key point; we need to install jenkins in master only. we need not to install jenkins on slave/nodes. 
+but java installtion is mandatory.
+master instance only one instance, but node/slave will be no of instances.
+
+in realtime each node is treated as each enviornment.
+
+ex: dev, PROd, COB, UAT , QA.
+
+each node --> tomcat instances.
+
+the jobs are running between master and slave by using labels.
+no O/S dependency between master and slaves/nodes.
+
+jenkins --> linux and slaves --> windows /centos/....
+
+=====================
+1. need one jenkins server and slave server node
+2. install jave on slave node 
+3. configure slave node under manage nodes of jenkins master
+4. download agent.jar onto slave node
+5. run java command to connect with jenkins server.
+
+demo project:
+
+1. create login to jenkins using ec2
+2. create one another server using ec2 and this for slave
+3.create one slave node using manage jenkins --> manage nodes and clouds
+    3.1 create one new node
+    3.2 while creating executors you can give 2 
+	remote root direcotry : /var/lib/jenkins for default master node
+	here we can give custom dir for slave as we are running only slave node
+	 give /opt/build
+        Labels : you can give name any - java-build-node
+choozeing this one for this -->	launch agent by connecting it to the controller --> we want to run command on slave system to 
+	connect to the master 
+	launch agent via excecution of command on the controller -->we want to run command on master
+        system to connect to the master to the slave.
+4. disable workdir --it will create logs where in custom dir path
+5. click on use websocket
+6. keep this agenet as much as online.
+
+now when you build you will see below error: Agent java node (java application) error.
+
+to resolve follow below steps in notepad:
+
+after issue resolved after agent.jar files are downloaded:
+
+build will create after excecute project:
+
+drwxr-xr-x  4 root     root          39 Apr 16 13:06 build
+
+----------------------------------
+
+1. how to resolve Agent java node (java application) error.
+
+1. download agent.jar and upload into /home/ec2-user using mobaxterm sftp(just drag and drop)
+go to cd /opt then file(agent.jar) move to /opt folder as well before build
+
+2. mv /home/ec2-user/agent.jar /opt
+
+3. foreground:
+
+java -jar agent.jar -jnlpUrl http://43.204.30.248:8080/computer/java%20node/jenkins-agent.jnlp -secret 5b426ade47cc4ce83df862355b830279d4d3d30d2a344cfd4fc8e15e4e3edc81 -workDir "/opt/build"
+
+Background use & at end:
+
+java -jar agent.jar -jnlpUrl http://43.204.30.248:8080/computer/java%20node/jenkins-agent.jnlp -secret 5b426ade47cc4ce83df862355b830279d4d3d30d2a344cfd4fc8e15e4e3edc81 -workDir "/opt/build" &
+
+build dir will create after excecute project:
+
+drwxr-xr-x  4 root     root          39 Apr 16 13:06 build
+
+-----------------
+
+1. create one simple job/project using new item freestyle project
+
+2.go to build --> select build shell --> uptime, echo $workspace
+
+uptime by default run on master node , so i just want to run on slave node 
+
+3. i can select "restrict where this project cna be run" under preview  and give label name was given when slave node creating.
+
