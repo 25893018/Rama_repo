@@ -1,0 +1,15 @@
+
+
+here you need to give your username -25893018 and password you should give your token:
+
+
+pipeline{
+    agent any
+    stages{
+        stage("Hello"){
+            steps{
+                git credentialsId: 'Key-cred', url: 'https://github.com/25893018/Rama_repo.git'
+            }
+        }
+   }
+}
