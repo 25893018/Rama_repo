@@ -1,0 +1,215 @@
+
+CICD youtube videos
+https://www.youtube.com/watch?v=9RsmPNs7gT0
+https://www.youtube.com/watch?v=G_UCeeb5EPc&list=RDCMUC_evcfxhjjui5hChhLE08tQ&index=2
+
+GIT Credentials:
+https://www.youtube.com/watch?v=HSA_mZoADSw
+
+HTTPS:
+
+copy https from git hub :https://github.com/25893018/Rama_repo.git
+goto jenkins -->create one job called https
+
+
+setting --> developer settings --> personal access token --git-jenkins-token
+
+token: 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
+
+SSH:
+
+git config --global credential.helper gnome-keyring
+git ls-remote https://25893018@github.com/25893018/Rama_repo
+ssh-keygen -t ed25519 -C "chunduriramakrishna.b@gmail.com"
+
+-----BEGIN OPENSSH PRIVATE KEY-----
+b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAAAMwAAAAtzc2gtZW
+QyNTUxOQAAACC2CWyn63KsHV44vUx8l2aqwSsS12sL8LC8AdO3x4ACrwAAAKiTzsTuk87E
+7gAAAAtzc2gtZWQyNTUxOQAAACC2CWyn63KsHV44vUx8l2aqwSsS12sL8LC8AdO3x4ACrw
+AAAECSjgmE5tsgFrTr2T0iYARiiZSUXLhGMfAejMarZWaP3bYJbKfrcqwdXji9THyXZqrB
+KxLXawvwsLwB07fHgAKvAAAAH2NodW5kdXJpcmFtYWtyaXNobmEuYkBnbWFpbC5jb20BAg
+MEBQY=
+-----END OPENSSH PRIVATE KEY-----
+
+Pub key: ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILYJbKfrcqwdXji9THyXZqrBKxLXawvwsLwB07fHgAKv chunduriramakrishna.b@gmail.com
+
+ssh key name :Jenkins-sshkey
+================================================
+
+
+SSH agent key for jenkins:
+
+steps to generate:
+  ssh-keygen
+ ls -al
+cat rama-key
+
+
+-----BEGIN RSA PRIVATE KEY-----
+MIIEowIBAAKCAQEAyjRT9l6GSriwzphpX3PlksPzW/WEzq0tgrPe4u6MiWelERZv
+bF4Rn1Qg4Ow3REv15Jcy7WyJ5gvTHbjGabAXKUTjBPVPVVQWb5amMrj5kjTg2Tdo
+W84o2ODzroXSw0J59KaRjNxoH9ZHMGVktLIS3lkOCVX/P5+43m6iWvXNUdc+py6e
+8yxkyxXfnUtPvOXqYZmPVB95lcbxHEE9Dt0LJ59qJI23aX7Rr3omQAUwNymFaFRD
+yOriapr5yfexC6cPourqNw2I9S5rpRvYpuXKjd9ja+BP90xRCO4D3mdg9bz9G7Ud
+srf26LnwnGjmEE1d81I4Hn88DgKfhETKCT4XkwIDAQABAoIBAAsR+lbOrgOBQQzO
+g1ZafgMe/z/VnUPDb25scpNyA/ex2POqiscgD07tyC8IP65ZikjNjlg5TQNvOkuy
+RgqbPWlhABzRYVqGlAPf95FnVyKOCpFZ2zjLfKkDB9RSN0vBY/Pk+qr/liPIE3Wu
+12idJzNNJNuV/bd6AyEKZZEdS/Ri/3lypky7BrRHQlpvpbwaJ/pf5LULV8SE6BYz
+PyBCFTCGAEurhtX0JtMJUXxca8tCY+u2hSZDBNNf2KqXeAcTQ9i7DndKe0Z4OMiJ
+NgCFaBKtep0xgFepwD9p1zExsHpEaVXHnyo7YBPrLAc74eVWsU+H37oVlGpgqUqu
+LDJ5xiECgYEA68qZFnvsq/WjSQlKLNjPbZ19sz3yZdrFunGeBcsjPxiQ/apgL22p
+SDhJmPOX1lWKrDiMzeV6ft0qDAs/nxrIjc64fNn1hvkZT1l0X4/7HvlwGI3tvDCq
+7C4JcQS8DKrWN3Wr5+CaIXJ3TmAZpjzRp97smkrgv3HIjG2U6p0rwC8CgYEA24jP
+xZWxEH/5ZINPCYI0cr1EvKBN1vN3CexTfu8pkabx02LJv9DPxgcE2WEf/28FXSzA
+Q5pdnixbznaBFlNhlKpScudxcF1wNIAGVCZeyK8mtbMhRcefZw4dd4VqI8dFRDU8
+g5n/asY5gT5QT2+NgI1R+ie3tWg1PxYniJ2XAd0CgYEAhhSf9wQjMimtX3PT5Sqo
+0YlUGF/qffbopzvCg0LfWRrMICMJLQ8ryvCPEVW7itr7zzEdCFwsywVSyqR+2iet
+0c2yZPTARK9TsCaLIWhLgXKQRrY2cOQv3bvUDJuHn6BpzgGw7ltu6gQgScYl77z3
+74C5hId9w/+c7hXGL5+OaGsCgYAZ+/aDr3UWu97766LWQEgO8KILJXoxH/4N+Z/k
+XVBxQe5Lk9zHTGLbUIddZ2aPKEfdQGe9WK8OArgXFuWui83397TsjsJZh2W5gRG+
+sg/z9u9BAGPGy5rtarlIJU1r0LE9IoP4G6kkrTOvPX3p+Q0pkxCJ6FuRKDVtMyUY
+wXZXLQKBgHjDeRhWIp0698xDbmJwHuneD90NzipJLoj7CAG/aaoD0Z4SDEexCwsn
+ETY5OG2Bvr1w+r0M9wVslOX+0n2J0T4xEZ2CclL9Rw+40xzFHIUZkj5uxJjSxhsA
+YPnLXinTzDPRAqykauH4gTvdlOtcMPDIR3f6iOyFFuqL7vDfjZUR
+-----END RSA PRIVATE KEY-----
+
+Id: rama-key
+username: rama-keypipeline
+
+vi ~/.ssh/authorized_keys
+
+7f18ae029f484bee8a4b3a1ce4eac093
+
+Git: https://github.com/srinivas1987devops/myweb
+
+Tomcat: https://tomcat.apache.org/download-90.cgi
+
+Three ways can upload/install jenkins plugins
+
+1. manage jenkins --> manage plugins --> go to avilaible  --> install plugins
+2. manage jenkins --> manage plugins --> go to advanced --> upload downloaded plugin and install
+3. download plugin into local laptop --> and copy plugin into jenkins instance --> to this path -->/var/lib/jenkins/plugins
+
+Jenkins Pipeline:
+
+1. declarative pipeline 2: scriptive pipeline(using groovy script).
+
+	script start with declartaive that is declarative pipeline. you will written on git.
+	script start with node that is scriptive pipeline. you will written on jenkins dash board
+
+stages example: agent, any, none, label, docker.
+
+	git clone url
+	build
+	deployement -application providing/deploying to end user.
+
+
+1 step: create Ec2 instacen and install jenkins.
+2. Deploy to container  - install plugin on jenkins to deploy your application but this is for manual jenkins job.
+3. SSH Agent           --  install plugin on to run linux commands on jenkins using this plugin for pipeline automation -- to copy/deploy war files
+4. create another ec2 instance and install now apache tomcat
+    
+Note:    yum list| grep jdk -- to find java versions or amazon-linux-extras list  ---will give you all pkg details
+
+
+Tom cat installation:
+==================
+    4.1 first install java - sudo yum install -y java-1.8.0-openjdk-devel.x86_64
+    4.2 to goto tomcat url :https://tomcat.apache.org/download-90.cgi  --goto tomcat9 --> under core copy right click and then copylink this tar --> and execute in server - tar.gz (pgp, sha512)
+
+	sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.62/bin/apache-tomcat-9.0.62.tar.gz
+    4.3 tar -xvf apache-tomcat-9.0.62.tar.gz
+	cd apache-tomcat-9.0.62
+ 	ls -lrt
+	chmod 777 webapps
+	cd webapps/manager/META-INF
+	vi context.xml
+	in this file remove Value line
+   4.4 after update go back to --  cd apache-tomcat-9.0.62
+	goto --> cd conf
+	open --> vi tomcat-users.xml  file and then goto last update rolenames
+
+	ex: 
+
+<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+	<user username="deployer" password="deployer" roles="manager-script"/>
+	<user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+or
+
+  <role rolename="manager-gui"/>
+            <role rolename="manager-script"/>
+<user username="tomcat" password="tomcat" roles=manager-gui,manager-script/>
+
+  4.5 now comeback to cd apache-tomcat-9.0.62 then goto cd bin
+	./startup.sh   --it will start tomcat
+
+  Now can login to tomcat web application using port and IP
+
+  ex: 
+  http://13.126.27.89:8080/
+once you login ..click on manager app buttion and then give login for username and password (tomcat) --username and password
+	
+5. 
+
+
+
+
+===========================
+
+pipeline{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven3/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git credentialsId: 'Javapipelinedemo', url: 'https://github.com/25893018/Rama_repo.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean install"
+                sh "mv target/*.war target/myweb.war"    
+            }
+        }
+        stage("deploy-dev"){
+            steps{
+                sshagent(['tomcat-new']) {
+                sh """
+                    scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@10.0.0.67:/home/ec2-user/apache-tomcat-9.0.62/webapps/
+                    
+                    ssh ec2-user@10.0.0.67 /home/ec2-user/apache-tomcat-9.0.62/bin/shutdown.sh
+                    
+                    ssh ec2-user@10.0.0.67 /home/ec2-user/apache-tomcat-9.0.62/bin/startup.sh
+                
+                """
+            }
+            
+            }
+        }
+    }
+}
+
+here plz note IP address should be updated for private ip for tomcat ec2 server.
+
+================================================================
+
+pipeline{
+    agent any
+    stages{
+        stage("Hello"){
+            steps{
+                echo "welcome to jenkins pipeline"
+            }
+        }
+   }
+}
+
+        
