@@ -1,0 +1,142 @@
+
+whereis mvn  -to find maven path
+
+install mvn plugin if not installed. -- Maven Integration and Maven Invoker
+
+
+to update manage jenkins --> global config settings 
+[root@ip-10-0-0-237 youtubearti]# cd /Rama-repo
+-bash: cd: /Rama-repo: No such file or directory
+[root@ip-10-0-0-237 youtubearti]# cd Rama-repo
+-bash: cd: Rama-repo: No such file or directory
+
+
+
+Define value for property 'groupId': youtube
+Define value for property 'artifactId': youtubearti
+Define value for property 'version' 1.0-SNAPSHOT: :
+Define value for property 'package' youtube: :
+Confirm properties configuration:
+groupId: youtube
+artifactId: youtubearti
+version: 1.0-SNAPSHOT
+package: youtube
+ Y: : Y
+
+
+
+
+pipeline{
+    agent any
+    
+    environment{
+        PATH = "/opt/maven-3.8.5/bin:$PATH"
+    }
+    stages{
+        stage("Git Checkout"){
+            steps{
+                git url: 'https://github.com/ravdy/hello-world.git'
+            }
+        }
+        stage("Maven Build"){
+            steps{
+                sh "mvn clean install"
+                   
+            }
+        }
+   }
+}
+
+
+install git 
+install java
+cd /opt
+install maven
+
+229  yum install git -y
+  
+ cd /opt
+ wget https://dlcdn.apache.org/maven/maven-3/3.8.5/binaries/apache-maven-3.8.5-bin.tar.gz
+ ls -al
+ tar -xvf apache-maven-3.8.5-bin.tar.gz
+  mv apache-maven-3.8.5 maven-3.8.5
+  vim ~/.bashrc
+  ##Copy paste the below content in ~/.bashrc file at the end
+	export M2_HOME=/opt/maven-3.8.5
+	export M2=$M2_HOME/bin
+	export PATH=$M2:$PATH
+
+    [root@ip-10-0-0-252 maven-3.8.5]# cd ~
+    [root@ip-10-0-0-252 ~]# source .bashrc
+    [root@ip-10-0-0-252 ~]#
+
+   source ~/.bashrc
+   mvn --version
+
+  if maven file is sync with root directory it wont execute , plz change ownship to jenkins if you see Root.
+
+  chown -R jenkins:jenkins maven-3.8.5
+
+  f955afe8824d4629947a1d93ee586a55
+
+install 
+===========================================================
+history:
+============
+sudo yum install git -y
+
+cd /opt/
+wget http://www-eu.apache.org/dist/maven/maven-3/3.3.9/binaries/apache-maven-3.3.9-bin.tar.gz
+tar -xvzf apache-maven-3.3.9-bin.tar.gz
+rm -rf apache-maven-3.3.9-bin.tar.gz
+mv apache-maven-3.3.9 maven-3.3.9
+## Set Maven Path in ~/.bashrc file
+vim ~/.bashrc
+##Copy paste the below content in ~/.bashrc file at the end
+
+export M2_HOME=/opt/maven-3.3.9
+export M2=$M2_HOME/bin
+export PATH=$M2:$PATH
+
+source ~/.bashrc
+mvn --version
+
+history:
+
+  18  mv apache-maven-3.8.5 maven-3.8.5
+   19  cd maven-3.8.5/
+   20  pwd
+   21  mvn --version
+   22  ls -al
+   23  mvn --versin
+   24  ls -al
+   25  cd ..
+   26  ls -al
+   27  cd maven-3.8.5/
+   28  yum install maven -y
+   29  mvn --version
+   30  pwd
+   31  vim ~/.bashrc
+   32  cd -
+   33  cd ..
+   34  source .bashrc
+   35  cd -
+   36  source .bashrc
+   37  cd maven-3.8.5/
+   38  cd ~
+   39  source .bashrc
+   40  mvn --version
+
+
+
+scope: citi
+command: citi
+description: citi
+groupId: citi
+artifactId: citiarti
+version: 1.0-SNAPSHOT
+package: citi
+ Y: : Y
+
+
+
