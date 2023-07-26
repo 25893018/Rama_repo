@@ -1,0 +1,281 @@
+
+DEMO project for Jenkins setup:
+
+d73dedf61ba24ad8b75c88c83978ae33
+
+/var/lib/jenkins/secrets/initialAdminPassword  03f87802747840efbf8eef4c651d0ba7  --password for jenkin admin
+
+GIT URL:
+https://github.com/sd031/aws_codebuild_codedeploy_nodeJs_demo
+
+URL for steps:
+
+https://learn.sandipdas.in/2021/06/03/build-docker-image-using-jenkins-pipeline/
+
+AWS site for docker:
+
+https://docs.aws.amazon.com/AmazonECS/latest/developerguide/docker-basics.html
+
+
+Launch Aws instance through connect:then 
+
+go to jenkis io url and then click on redhat 
+
+https://pkg.jenkins.io/redhat-stable/
+
+copy jenkins repositry and paste on Ec2 server to execute: 
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+output on Ec2:
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-0-0-244 ~]$ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+--2022-03-27 06:13:39--  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 151.101.154.133, 2a04:4e42:24::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|151.101.154.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 85
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+100%[================================================================================>] 85          --.-K/s   in 0s      
+
+2022-03-27 06:13:39 (2.57 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [85/85]
+
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+======================================================================
+2. copy jenkins key and execute on ec2 : sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+Output:
+
+[ec2-user@ip-10-0-0-244 ~]$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+==================================================
+
+3. install now for extra pkg for enterprise linux:
+
+sudo amazon-linux-extras install epel -y
+
+4. now install Standered Java version :
+
+sudo yum install java-1.8.0-openjdk -y
+
+5. Now install git:
+
+sudo yum install git -y
+
+6. now maven install:
+
+sudo yum install maven -y 
+
+7. now install jenkins:
+
+sudo yum install jenkins -y
+
+8. now just check versions for jenkins/git/maven.
+
+git --version
+mvn --version
+jenkins --version
+
+9. now start jenkins :
+
+sudo systemctl restart jenkins
+sudo systemctl status jenkins
+
+10: now go to Ec2 instach take Public ip and add to ip port number in browser.
+
+public ip:8080
+ex: 15.207.85.199:8080
+
+11. now copy this path in unlick jenkins URL: /var/lib/jenkins/secrets/initialAdminPassword
+
+[ec2-user@ip-10-0-0-244 /]$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+d73dedf61ba24ad8b75c88c83978ae33  --password for jenkins:
+
+[ec2-user@ip-10-0-0-244 /]$ 
+
+12. now it will turn to Customize jenkins screen..here you need to intall all suggested plugins
+
+click on suggested plugins , it will install all suggested plugins.
+
+13. Create First Admin User
+
+user name: chehan
+Password: Chehan01*
+full name: chehan chunduri
+email: chunduriramakrishna.b@gmail.com
+
+Now jenkis is ready:
+
+----------------------------------
+
+14. if jenkins have any latest updates:
+
+for java ex:
+sudo apt-get update.
+sudo apt install java-1.8.0-openjdk -y
+
+for jenkins ex:
+
+sudo apt install jenkins.
+
+
+--------------------------------------
+
+total steps for login above done:
+Repo-->Key--> Java--> Git, jenkins, maven, Epel to install-->restart --> status--> now launch
+
+===============================================
+
+DOCKER Installation:
+==================================================================================================================
+
+Steps:
+
+sudo yum update -y
+sudo amazon-linux-extras install docker
+
+Step1: To install Docker on an Amazon EC2 instance
+
+sudo yum update -y
+
+Step2: Install the most recent Docker Engine package.
+Amazon Linux 2 : sudo amazon-linux-extras install docker
+
+if it is older version use below:
+Amazon Linux.: sudo yum install docker
+
+Step3:Start the Docker service.
+
+sudo service docker start
+or 
+systemctl start docker.service
+
+(Optional) On Amazon Linux 2, to ensure that the Docker daemon starts after each system reboot, run the following command:
+
+sudo systemctl enable docker
+
+Step4: Add the ec2-user to the docker group so you can execute Docker commands without using sudo.
+
+sudo usermod -a -G docker ec2-user
+
+Step 5: Status to check:
+
+sudo service docker status
+or
+systemctl status docker.service
+docker info
+
+===================================================
+
+Now add jenkins user to docker group:
+
+Step1:sudo usermod -a -G docker jenkins
+step2: restart jenkins service: sudo service jenkins restart
+step3: reload system daemon : sudo systemctl daemon-reload
+step4:restart dockeer service:sudo service docker start or systemctl start docker.service
+
+---------------------------------------------------------------
+Step 5: Now go to jenkins dashboard  install jenkins plugins on docker: 
+
+manage jenkins --> plugin manager ->go to avilibale: install plugins for  - docker and docker pipeline 
+
+Step 6: install git : sudo yum install git
+
+Step7: create AWS ECR repo in AWS:
+
+go to AWS console --> search ECR --> create repository
+
+Step8: create IAM role and with AmazonEC2containerregistryfullacces policy and attach with then jnekins EC2 install.
+
+after created role --> go to Ec2 --> security --> modify IAM role --> attach above IAM role created:
+
+just do one checkout for authentication:
+
+command can found in repository section --> in push commands:
+
+Retrieve an authentication token and authenticate your Docker client to your registry.
+Use the AWS CLI:
+sudo aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 072812419879.dkr.ecr.ap-south-1.amazonaws.com
+
+Step 9: create Jenkins pipeline: 
+
+go to jenkins dashboard --> new item--> give any name (JenkinsECRdemoregistry)
+
+select pipeline project --> then 
+-----------------------------------------------
+
+in GitHub Project ->Eenter GIt project url --yu can take from git hub url is there in top of this notepad
+in Build triggers -->poll SCM : * * * * *(every one min minute)
+
+then go to advanced project options -->pipeline script
+
+Pipeline code you can found here:
+
+https://learn.sandipdas.in/2021/06/03/build-docker-image-using-jenkins-pipeline/
+
+Ex:
+
+pipeline {
+    agent any
+    environment {
+        AWS_ACCOUNT_ID="072812419879"
+        AWS_DEFAULT_REGION="ap-south-1" 
+        IMAGE_REPO_NAME="dockerimagedemo"
+        IMAGE_TAG="Latest"
+        REPOSITORY_URI = "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}"
+    }
+   
+    stages {
+        
+         stage('Logging into AWS ECR') {
+            steps {
+                script {
+                sh "aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com"
+                }
+                 
+            }
+        }
+        
+        stage('Cloning Git') {
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [], submoduleCfg: [], userRemoteConfigs: [[credentialsId: '', url: 'https://github.com/sd031/aws_codebuild_codedeploy_nodeJs_demo.git']]])     
+            }
+        }
+  
+    // Building Docker images
+    stage('Building image') {
+      steps{
+        script {
+          dockerImage = docker.build "${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+        }
+      }
+    }
+   
+    // Uploading Docker images into AWS ECR
+    stage('Pushing to ECR') {
+     steps{  
+         script {
+                sh "docker tag ${IMAGE_REPO_NAME}:${IMAGE_TAG} ${REPOSITORY_URI}:$IMAGE_TAG"
+                sh "docker push ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${IMAGE_REPO_NAME}:${IMAGE_TAG}"
+         }
+        }
+      }
+    }
+}
+
+-----------------------------------------------------------------------------
+
+BUILD view:
+
+Stage View
+Logging into AWS ECR	Cloning Git	Building image	Pushing to ECR
+
+Build success
+==========================================================================
+
+
+
+
