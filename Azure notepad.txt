@@ -1,0 +1,649 @@
+For an Amazon Linux AMI, the user name is ec2-user.
+For a Centos AMI, the user name is centos.
+For a Debian AMI, the user name is admin or root.
+For a Fedora AMI, the user name is ec2-user or fedora.
+For a RHEL AMI, the user name is ec2-user or root.
+For a SUSE AMI, the user name is ec2-user or root.
+For an Ubuntu AMI, the user name is ubuntu or root.
+ 
+
+=======================================================
+simple azure dev project:
+===================================================
+1.create project:
+
+2. import git project in Azure repo: https://github.com/25893018/secretsanta-generator.git
+	create virtual mechine to run your app( to connect mobaxterm -azureuser
+		
+		sudo yum update -y 
+                sudo apt-get update -y 
+                sudo apt install openjdk-11-jre -y 
+                sudo apt install maven -y
+
+
+3. goto settings and create pool to run your application
+4. now click on pool --> you will see agent buttion to create a agent
+5.  follow steps to install agent on virtual mechine
+		wget https://vstsagentpackage.azureedge.net/agent/3.220.5/vsts-agent-win-x64-3.220.5.zip
+		 mkdir myagent && cd myagent
+		 
+		azureuser@devsecops:~/agent$ pwd
+		/home/azureuser/agent
+		cd ../
+		ls  -lrta
+
+		tar -xvf vsts-agent-linux-x64-3.220.5.tar.gz
+	
+		azureuser@devsecops:~/agent$ ls -lrta
+		azureuser@devsecops:~/agent$ ./config.sh
+		Enter server URL > https://dev.azure.com/chunduriramakrishnab
+		Enter authentication type (press enter for PAT) >
+		Enter personal access token 
+to get persional access token --> go to your organization--> user settings on right side corner-->
+
+select personal access token  --> click on new token
+	
+Enter personal access token > ****************************************************
+Connecting to server ...
+
+>> Register Agent:
+
+Enter agent pool (press enter for default) > DevSec-Pool
+Enter agent name (press enter for devsecops) > Devsec-Pool
+Scanning for tool capabilities.
+Connecting to the server.
+Successfully added the agent
+Testing agent connection.
+Enter work folder (press enter for _work) >
+2023-07-24 16:31:54Z: Settings Saved.
+azureuser@devsecops:~/agent$
+
+now your is ready and but still not running , to run use this script
+ 
+azureuser@devsecops:~/agent$ ls -lrt
+total 109036
+-rwxr-xr-x  1 azureuser azureuser      2014 Jun  5 12:23 run.sh
+-rw-r--r--  1 azureuser azureuser      2753 Jun  5 12:23 run-docker.sh
+-rw-r--r--  1 azureuser azureuser      9465 Jun  5 12:23 license.html
+-rwxr-xr-x  1 azureuser azureuser       726 Jun  5 12:23 env.sh
+-rwxr-xr-x  1 azureuser azureuser      3018 Jun  5 12:23 config.sh
+drwxr-xr-x  6 azureuser azureuser      4096 Jun  5 12:24 externals
+drwxr-xr-x 14 azureuser azureuser     20480 Jun  5 12:35 bin
+-rw-rw-r--  1 azureuser azureuser 111581047 Jun  5 13:33 vsts-agent-linux-x64-3.220.5.tar.gz
+drwxrwxr-x  2 azureuser azureuser      4096 Jul 24 16:04 myagent
+drwxrwxr-x  2 azureuser azureuser      4096 Jul 24 16:19 _diag
+-rwxr-xr-x  1 azureuser azureuser      4629 Jul 24 16:31 svc.sh
+
+	azureuser@devsecops:~/agent$ ./run.sh
+Scanning for tool capabilities.
+Connecting to the server.
+2023-07-24 16:33:13Z: Listening for Jobs
+
+=======================================================
+Next step2:
+===========
+go to pipeline and create CI pipeline:
+===========================
+
+pipelines --> create pipeline
+
+--- JDK & Maven Installation ---
+
+sudo apt-get update -y
+sudo apt install openjdk-11-jre -y
+sudo apt-get install maven -y
+
+--- Docker Installation ---
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+  sudo apt-get update
+  
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  
+sudo service docker restart
+sudo usermod -aG docker $USER
+newgrp docker
+sudo chmod 666 /var/run/docker.sock
+sudo systemctl restart docker
+
+sudo service docker status
+===========================
+to start sonarqube use below command:
+===========================
+to run docker: docker run -d --name sonar -p 9000:9000 sonarqube:lts-community
+ 	
+sonar.java.binaries=.
+ analysis on sonarqube
+run code analysis
+publish quality gate result
+
+
+Third step is : OWASP depency check:
+==============
+Depency check
+
+
+fourth step : execute jar file  to use -  Shell exec task without file(Bash)
+
+after market place completed --search command line script
+
+in script you can use below commmand to expose your app/jar file on tomact server
+
+java -jar target/*.jar
+=====================================================================
+
+=================================================================================
+**************  2nd project on Azure devops  ************************
+===========================================================================
+
+how to use Azure container registry
+
+	1.-> search for container registries on portal  --> create ACR
+	2. with free subscription we cannot create service principle for ACR. so insted we can use docker hub to practice
+	3. login into docker hub
+	4. create pipeline using docker  -->  dockerinstall, and buildpush
+	5. once build/images pushed to docker hub 
+	6. deploy application using bash script (use inline for bash to run scripts)
+
+		used bash script to run/deploy the application 
+		docker run -d --name secretsanta -p 8080:8080 25893018/azuredemo25893018
+
+================================================================================
+
+******* third project Kuberneties services deploy ------------------------
+=================================================================================
+
+
+goto azure portal and search kubernetes services in search box
+
+click on create --> create kubernetes cluster
+
+
+
+The Generalist: AZ-900 Microsoft Azure Fundamentals
+
+The Architect: AZ-300 Microsoft Azure Architect Technologies and AZ-301
+=========================================
+As of September 30, 2020, the AZ-300 and AZ-301 certifications have been 
+replaced with AZ-303 and AZ-304. While these new designations are part of 
+Microsoft's ongoing innovation around Azure deployments, the content and 
+examinations are virtually identical to their 300 and 301 counterparts.
+
+The Security Expert: AZ-500 Microsoft Azure Security Technologies
+======================
+As cloud security threats evolve, enterprises are looking to hire skilled 
+and certified information security professionals. 
+The Azure cloud security pathway typically starts with AZ-900 (optional), 
+followed by AZ-500 to earn the Microsoft Certified Azure Security Engineer 
+Associate designation.
+
+The DevOps Engineer: AZ-103 Microsoft Azure Administrator and AZ-400
+========================================
+Much like AZ-300 and AZ-301, AZ-103 was recently replaced with a new 
+certification, AZ-104. Again, content and certification exam requirements 
+are almost identical and offer a great opportunity for IT pros interested 
+in Azure cloud deployments' development and operations side.
+
+To earn the Microsoft Certified DevOps Engineer designation, technology 
+staff must complete AZ-104 Microsoft Azure Administrator, 
+followed by the AZ-400 Microsoft Azure DevOps solution exam. 
+Together these qualifications demonstrate that IT professionals 
+can implement solutions on the Azure platform, analyze resource use 
+and consumption and manage these resources at scale to design and deploy 
+custom Azure cloud architectures capable of meeting specific business 
+objectives.
+
+azureuser  
+
+1:create VM
+
+ how to Install the web server role command after install the virtual mechine:
+==================================
+Install-WindowsFeature -name Web-Server -IncludeManagementTools
+
+after install use public IP to see whether URL is working or not
+
+2.Create a WebAPP using docker hub and CLI
+
+Create, build, deploy, and manage powerful web, mobile, and API apps for employees or customers using a single back-end. Build standards-based web apps and APIs using .NET, Java, Node.js, PHP, and Python.
+===============
+task1: create a web app
+task2: Test the Web App
+
+click on App Services -->Web App
+
+to see microsoft public images:https://hub.docker.com/_/microsoft-windows
+
+Image used : mcr.microsoft/azuredocs/aci-helloworld
+
+====================
+
+create a resource group using command or CLI
+az group create --name myResourceGroup --location eastus
+
+create a container:az container create --resource-group myResourceGroup --name mycontainer --image mcr.microsoft.com/azuredocs/aci-helloworld --dns-name-label aci-demo --ports 80
+
+pull the container logs:az container logs --resource-group myResourceGroup --name mycontainer
+
+Attach output streams: az container attach --resource-group myResourceGroup --name mycontainer
+
+When you're done with the container, remove it using the az container delete command:
+
+az container delete --resource-group myResourceGroup --name mycontainer
+To verify that the container has been deleted, execute the az container list command:
+az container list --resource-group myResourceGroup --output table
+
+If you're done with the myResourceGroup resource group and all the resources it contains, delete it with the az group delete command:
+az group delete --name myResourceGroup	
+
+3:LAB 03: Deploy Azure container INstances:
+=====================================
+Azure Container Instances (ACI) allows you to quickly and easily run 
+containers on Azure without managing servers or having to learn new tools. 
+ACI offers per-second billing to minimize the cost of running containers 
+on the cloud.
+=======================================
+Task1: create a containeer instance
+Task2: Verify Deployment of the container instance.
+
+click on container instances after search -->create
+
+Imge used: nginx
+
+depoyled container using nginx:
+
+=========================================
+simple node js docker file used:
+
+FROM node:8.9.3-alpine
+RUN mkdir -p /usr/src/app
+COPY ./app/* /usr/src/app/
+WORKDIR /usr/src/app
+RUN npm install
+CMD node /usr/src/app/index.js
+=======================================================
+
+4. How to create a Vnetwork
+=======================================
+Task1: Create a virutal network
+Task2: create two virtaul mechines using windows
+task3: test the connection
+
+ping vmechine01
+ping vmechine02
+
+========================================================
+5.Create Blob Storage:
+
+Create  storage account
+work with blob storage
+monitor the storage account
+
+4 storage types:
+containers
+file shares  :- using file share you can sync/create new drive and create new files and upload
+
+queues
+tables
+=====================================================
+6. Azure Functions
+
+Write any function in minutes – whether to run a simple job 
+that cleans up a database or build a more complex architecture. 
+Creating functions is easier than ever 
+before, whatever your chosen OS, platform, or development method.
+
+create function app
+create a HTTP triggerd function and test
+----------------------------------
+
+7 Windows VM mechine using template
+===================================
+
+https://learn.microsoft.com/en-us/samples/azure/azure-quickstart-templates/vm-simple-windows/
+
+8.to see resource groupname on powershell: Get-AZResourceGroup
+9. to see resource group name on Bash : az group list --output table
+
+====================
+10.implement azure key valut
+===============
+Azure Key Vault is a cloud service used to manage keys, secrets, and 
+certificates. Key Vault eliminates the need for developers to store security
+information in their code. It allows you to centralize the storage of your 
+application secrets which greatly reduces the chances that secrets may be 
+.leaked. Key Vault also allows you to securely store secrets and keys backed 
+by Hardware Security Modules or HSMs. The HSMs used are Federal Information 
+Processing Standards (FIPS) 140-2 Level 2 validated. In addition, key vault 
+provides logs of all access and usage attempts of your secrets 
+so you have a complete audit trail for compliance.
+
+create a azure key vault
+ 
+after creating keyvalut, under settings you can see keys, secrets, certificates.
+
+add a secret to the key valut
+
+after creating the secret, you can see URI aviliable for secret identifer to use any where in your application.
+
+=====================
+11. Manage access with RBAC  - role based access control
+
+you can create or remove access for user using RBAC.
+
+View and assign roles  --> you can view resource level/ resource group level 
+====================       or subscription level.
+
+goto resource group-->IAM-->Role Assignments-->click add --> role assignment
+
+to add role for user
+
+monitor role assignments --> you can check in activity log
+=======================
+and remove a role  --> you remove user under IAM
+===================
+===============================================================
+
+12. Manage resource locks:
+============================
+verify the existing resource group
+add a lock to the resource group and test deletion
+=============================
+Example:
+to add locks to resource/groups --> go to resourcegroups -->click key under settings
+when you creating lock --> give lock type as delete as we are testing delete option here.
+
+once lock created try deleting resource group, it will not delete resource group as we already created lock on resource group.
+
+======================
+test deleting a member to the resource group
+remove the resource lock
+====================
+b Example:
+create one storage account under same resource group and then try to delete resource created - storage account
+it will not delete as lock is created on resource group level.
+
+now delete lock and try to remove resource creatied storage account.
+now it will delete storage account as lock was deleted/removed.
+
+========================================================
+
+12: Implement Resource tagging:
+
+create a policy assignment
+creae a storage account to test the required tagging
+view all resources with a specific tag
+delete the policy assignment
+
+search for policy in global searcch box under authoring-->assignmeents-->Assign policy
+
+when you click on create assign policy and policy defination or assignment name select
+
+"Require a tag and its value on resources" and in parameters tab give Tag name: company Tag value: citibank 
+and then click create policy now(atleast 10 mins it will take effect)
+
+
+and then try to create any resource ..like vm or storage account
+you will get error , becz if you didnt added tag that was created for storage account .
+if you give tag proprely created one ..valication will be successful
+
+if you want to see all tags , search in global box tags , then you will see all tags for resources
+
+================================================================
+13. Azure resouce policy for location wise
+
+create a policy assignment
+test allowed location policy  --> this is within a scope based on location
+delete the policy assignment
+
+****this policy allow to restrictions to create resouces based on location 
+
+search for policy in global searcch box under authoring-->assignmeents-->Assign policy
+
+when you click on create assign policy and policy defination or assignment name select
+
+"allowed location"
+
+in parameters tab -> select location which county you need create only resources.
+
+
+======================================
+14. Azure pricing calculator
+=====================================
+https://azure.microsoft.com/en-in/pricing/calculator/?&ef_id=_k_CjwKCAjw5MOlBhBTEiwAAJ8e1sGeWEns6okTfvNAjEWh2u_60yRnFUzQ0ZSD3IC0OHTlAMM1pE04VBoCqOoQAvD_BwE_k_&OCID=AIDcmmf1elj9v5_SEM__k_CjwKCAjw5MOlBhBTEiwAAJ8e1sGeWEns6okTfvNAjEWh2u_60yRnFUzQ0ZSD3IC0OHTlAMM1pE04VBoCqOoQAvD_BwE_k_&gclid=CjwKCAjw5MOlBhBTEiwAAJ8e1sGeWEns6okTfvNAjEWh2u_60yRnFUzQ0ZSD3IC0OHTlAMM1pE04VBoCqOoQAvD_BwE
+Azure pricing calculator is for cloud
+Tco calucaltor for onpremisies workloads
+
+15. how to open a support request
+
+search help and support in global search box
+
+============================================================
+
+AZ 104 :AZ-104 Microsoft Azure Administrator, 
+followed by the AZ-400 Microsoft Azure DevOps
+========
+
+Azure AD concepts:
+=============
+Identity: An object that can be Authencticated.--> it can be user
+Account: An identity that has data assoicated with it.
+Azure AD account: An identity created through Azure AD or another MS cloud service
+Azure tenant: A dedicated and trusted instance of Azure AD thats automatically
+created when your organization signs up for a microsoft cloud service subscription
+Azure Ad directory: Each Azure tennat has a dedicated and trusted azure AD directory.
+user subscription: used to pay for cloud services.
+
+---------------------------------
+microsoft Azure data factory(ADF) is a cloud based data integration service. that automates data movement and data transformation.
+
+makes schduling easier.
+continuous integration - git enabled : develop/build/deploy in  azure
+supports wide range of data sources/sinks dwe are given below.
+
+BLOB:- stores unstructured data like .txt, csv files...but .xlsx, xls  not support 
+
+data lake is used to store very large files.
+
+Hot --> storage account is used for reqularly.
+cool --> Storage account is used for rarely
+
+-----------------------------
+
+create azure data factory
+
+there are two ways we can navigate to ADF
+1.go to
+https://portal.azure.com/
+search in global box -->Data factories to create ADF
+
+once adf created --> click on  adf name --> you can see there LaunchStudio--> and click on LaunchStudio--> then you will go to ADF 
+
+2 second one is you can login to below url and select above ADF name created.
+
+to select ADF above created go into below ADF url.
+
+https://adf.azure.com/en/datafactories
+=========================================
+dataset represents the structure of the data within the linked data stores.
+ linked service defines the connection to the data source
+
+getmetadata -> list of files in a folder.
+foreach --> loop through all files in put and give out in output file
+pipeline creation:
+
+integration runtime
+================
+ you can use/dont want to create when you using only within cloud
+else if you want to connect onpremise server , then you have to create intergration
+server, else you can use defult one
+
+self hosted integratin runtime use for onpremise server when you connect to external
+=======================
+computer/outside cloud
+
+https://learn.microsoft.com/en-us/azure/data-factory/create-self-hosted-integration-runtime?tabs=data-factory
+
+
+IR@69dbbe39-71ee-4e69-bfbd-6d78371a4fff@RKADataFactory@ServiceEndpoint=rkadatafactory.eastus.datafactory.azure.net@tEJSCXYUmVhGfx+ZqTWzIZpnG5IdbaBwRvbUqiuy4Is=
+
+To connect to the SQL server:
+
+
+copydata --> to copy files source to destination
+delete --> to delete specify files in storage account
+dataflow --> to create sort the content/specific conditions to use in DB and storage in azure destination folder.
+
+A data flow is a visually designed data transformation in Azure Synapse Analytics1. It allows data engineers to develop data transformation 
+logic without writing code. The resulting data flows are executed as activities within Azure Synapse Analytics pipelines that use scaled-out 
+Apache Spark clusters1. Data flows are essentially an abstraction layer on top of Azure Databricks, which uses Azure Databricks clusters behind the 
+covers2. You can execute a data flow as an activity in a regular pipeline
+
+pipeline:- is used for to trigger the flow.
+
+Sample:
+
+create table Employee ( eID int NOT NULL IDENTITY(1,1) PRIMARY KEY, eName varchar(25) NOT NULL, 
+Mgr int NULL, Job text NOT NULL, Salary int NOT NULL, Comm int, hDate date NOT NULL, dID int NOT NULL, );
+
+
+insert into Employee(eName, Mgr, Job, Salary, Comm, hDate, dID) values ('ken Adams', 1004, 'Salesman', 70000, 20000, '2008-04-12', 1), 
+('Ru Jones', 1004, 'Salesman', 65000, 15000, '2010-01-18', 1), 
+('Dhal Sim', 1006, 'Accountant', 88000, NULL, '2001-03-07', 2), 
+('Ellen Honda', 1006, 'Manager', 118000, NULL, '2001-03-17', 1), 
+('Mike Bal', 1006, 'Receptionist', 68000, NULL, '2006-06-21', 3), 
+('Martin Bison', NULL, 'CEO', 210000, NULL, '2010-07-12', 3), 
+('Shen Li', 1004, 'Salesman', 86000, 18000, '2014-09-18', 1), 
+('Zang Ross', 1004, 'Salesman', 65000, 10000, '2017-02-02', 1), 
+('Sagar Kahn', 1004, 'Salesman', 70000, 15000, '2016-03-01', 1);
+
+storedprodcure:
+SELECT TOP (1000) * FROM [dbo].[Employee]
+
+ create procedure deleteemployee @eID int
+AS
+delete from [dbo].[Employee] where eId=@eID
+GO;
+
+To execute stored proc:
+==========
+exec deleteemployee  @eID=1
+
+in Azure data factory parameter need to pass: @pipeline().parameters.eID
+===============================
+
+For Each activity: defines a repeating control flow in an azure data factory. and executes specified activites in loop.
+================
+
+our pipleline should know what are the data aviliable in input folder and copy into destination -out put folder.
+
+1. take get metadata
+2. take for each 
+========================
+
+Look up acitivtity:
+================
+reads and returns the content of a configuration file or table
+it also returns the result of executing a query or stored procedure
+the output can bee a singletion value or array of attributes
+which can be consumed in subsequent copy , transforamtion or control flow activity like for each.
+
+exapmle: suppose i have empolyee and emp resign tbales . when i use emp resgin table data to remove, it should delete in employee table data as well.
+
+=======================
+
+hands-on lab exercise to use the Azure boards HOL
+================================
+================================
+
+https://www.youtube.com/watch?v=lJBNTI_KVwc&t=284s
+
+====================	
+MANAGE agile project
+1: task1: manage teams ares and iterations
+
+goto settings --> Teams--> team configuration -->iterations (to add sprints) 
+goto settings --> Teams--> team configuration -->areas (to add areas)
+
+2. task2: manage work items
+go to azure boards --> click on work items.
+
+3. task3: Manage sprints and capacity
+4. task4: customize Kanban boards
+5: Task5: customize team process
+
+AZURE DEVOPS DEMO GENERATOR
+ Azure DevOps Demo Generator helps you create projects on your Azure DevOps Organization with pre-populated sample content that includes 
+source code, work items, iterations, service endpoints, build and release definitions based on a template you choose. Read more
+
+The purpose of this system is to simplify working with the Azure Devops hands-on-labs, demos and other education material provided by 
+the Microsoft Azure Marketing team.
+
+1: task1: manage teams ares and iterations
+
+goto settings --> Teams--> team configuration -->iterations (to add sprints) 
+goto settings --> Teams--> team configuration -->areas (to add areas)
+
+Agile is a set of values and principles designed to make software development projects more efficient 
+
+Scrum is an Agile project management framework that organizes projects in iterations called Sprints.
+this iterative approach allows Scrum to produce work and test it quickly.
+
+What are Sprints?
+A Sprint is an iteration of an Agile project. In other words, it is common for project teams to break Agile projects into short, 
+repeatable phases. These phases typically last between one and four weeks. Each Sprint has a specific, measurable outcome. 
+They should produce a draft, prototype, or workable version of the final deliverable. 
+
+Iterations
+Teams plan and track work at regular time intervals, commonly referred to as an iteration or sprint. Here you can manage the iterations 
+for your team
+Areas
+Select the areas your team owns below. The selected area paths will determine what shows up on your team's backlog and what work 
+items your team is responsible for.
+
+
+2. task2: manage work items
+go to azure boards --> click on work items  --> click on work items --> epic
+
+An agile epic is a body of work that can be broken down into specific tasks (called user stories) based on the needs/requests of 
+customers or end-users. Epics are an important practice for agile and DevOps teams.
+we have multiple user stories/specific tasks, if we combine all those user stories to gether is called EPIC.
+===============
+user stories is nothing but a getting requirment from users called user story.
+========
+
+sprint is nothing but a set of user tasks to combine is called sprint and should be specific time bound to complete all user tasks/stories.
+======== 
+Feature is nothing but a proudct backlog 
+EPIC--> Feature--> user stores (tasks)
+
+Basic --> what to do , what are we doing, what is completed
+CMMI -->EPIC-->feature -->issue tracking(will go for change request process )
+
+CMMI :- Bug-->change reqeust-->epic-->feature -->issue-->requirment-->reveiw -->risk-->task-->test case.
+Agile :- Bug-->epic-->feature -->issue-->task-->test case-->user story.
+
+When adopting agile and DevOps, an epic serves to manage tasks. It's a defined body of work that is segmented into specific 
+tasks (called “stories,” or “user stories”) based on the needs/requests of customers or end-users.
+
+go to azure boards --> click on boards to see your work items.
+
+3. task3: Manage sprints and capacity
+4. task4: customize Kanban boards
+go to settings right corner up -->tag colours -->tag colour (tag-->data (colour you can chooze)
+
+Annonations -->easier to read and work
+Swimlanes visualize different classes of work as horizontal lanes on the board.
+
+Agent pool is nothing but a folder where all your agents avialible  which you want to build the application      
