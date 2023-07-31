@@ -1,0 +1,663 @@
+Jenkins:
+
+--- INSTALL JENKINS ---
+
+sudo apt install openjdk-11-jre
+
+curl -fsSL https://pkg.jenkins.io/debian-stable/jenkins.io-2023.key | sudo tee \
+  /usr/share/keyrings/jenkins-keyring.asc > /dev/null
+echo deb [signed-by=/usr/share/keyrings/jenkins-keyring.asc] \
+  https://pkg.jenkins.io/debian-stable binary/ | sudo tee \
+  /etc/apt/sources.list.d/jenkins.list > /dev/null
+sudo apt-get update -y 
+sudo apt-get install jenkins -y
+
+sudo systemctl enable jenkins
+sudo systemctl start jenkins
+sudo systemctl status jenkins
+
+
+
+or 
+
+Launch Aws instance through connect:then 
+
+go to jenkis io url and then click on redhat 
+
+https://pkg.jenkins.io/redhat-stable/
+
+copy jenkins repositry and paste on Ec2 server to execute: 
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+output on Ec2:
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-0-0-244 ~]$ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+--2022-03-27 06:13:39--  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 151.101.154.133, 2a04:4e42:24::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|151.101.154.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 85
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+100%[================================================================================>] 85          --.-K/s   in 0s      
+
+2022-03-27 06:13:39 (2.57 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [85/85]
+
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+======================================================================
+2. copy jenkins key and execute on ec2 : sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+Output:
+
+[ec2-user@ip-10-0-0-244 ~]$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+==================================================
+
+3. install now for extra pkg for enterprise linux:
+
+sudo amazon-linux-extras install epel -y
+
+4. now install Standered Java version :
+
+sudo yum install java-1.8.0-openjdk -y
+
+5. Now install git:
+
+sudo yum install git -y
+
+6. now maven install:
+
+sudo yum install maven -y 
+
+7. now install jenkins:
+
+sudo yum install jenkins -y
+
+8. now just check versions for jenkins/git/maven.
+
+git --version
+mvn --version
+jenkins --version
+
+9. now start jenkins :
+
+sudo systemctl restart jenkins
+sudo systemctl status jenkins
+
+10: now go to Ec2 instach take Public ip and add to ip port number in browser.
+
+public ip:8080
+ex: 15.207.85.199:8080
+
+11. now copy this path in unlick jenkins URL: /var/lib/jenkins/secrets/initialAdminPassword
+
+[ec2-user@ip-10-0-0-244 /]$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+d73dedf61ba24ad8b75c88c83978ae33  --password for jenkins:
+
+[ec2-user@ip-10-0-0-244 /]$ 
+
+12. now it will turn to Customize jenkins screen..here you need to intall all suggested plugins
+
+click on suggested plugins , it will install all suggested plugins.
+
+13. Create First Admin User
+
+user name: chehan
+Password: Chehan01*
+full name: chehan chunduri
+email: chunduriramakrishna.b@gmail.com
+
+Now jenkis is ready:
+
+----------------------------------
+
+14. if jenkins have any latest updates:
+
+for java ex:
+sudo apt-get update.
+sudo apt install java-1.8.0-openjdk -y
+
+for jenkins ex:
+
+sudo apt install jenkins.
+
+
+
+------------------Official Page-------------------
+
+https://www.jenkins.io/doc/book/installing/linux/#debianubuntu
+
+==========================================================================
+
+--- JDK & Maven Installation ---
+
+sudo apt-get update -y
+sudo apt install openjdk-11-jre -y
+sudo apt-get install maven -y
+
+--- Docker Installation ---
+
+sudo apt-get update
+sudo apt-get install ca-certificates curl gnupg
+
+sudo install -m 0755 -d /etc/apt/keyrings
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+sudo chmod a+r /etc/apt/keyrings/docker.gpg
+
+echo \
+  "deb [arch="$(dpkg --print-architecture)" signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+  "$(. /etc/os-release && echo "$VERSION_CODENAME")" stable" | \
+  sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+  
+  sudo apt-get update
+  
+  sudo apt-get install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+  
+sudo service docker restart
+sudo usermod -aG docker $USER
+newgrp docker
+sudo chmod 666 /var/run/docker.sock
+sudo systemctl restart docker
+
+sudo service docker status
+=============================================================================
+
+
+devops project setup with CI CD process using jenkins:
+=============================================
+maven/gradle : build tool (compute +Unit test execution +package as war/jar)
+.jar files: The .jar files contain libraries, resources and accessories files like property files.
+
+.war files: The war file contains the web application that can be deployed on any servlet/jsp container. 
+The .war file contains jsp, html, javascript and other files necessary for the development of web applications.
+
+github/bitbucket : source code repository server (to integrate source code)
+sonarQube : for code review software (to identify developer mistakes in code)
+nexus/Jfrog : artifactory repository server (to store build artifacts -jars/wars)
+apache tomcat : webserver (to execute jave based web applications)
+jenkins : deployment tool for CI/CD.
+Terraform : infrastructure creation tool (AWS/Azure/GCP)
+Ansible/chef/puppet : configuration management tool.
+Docker : containerzation platform (to build + ship+ run+ anywhere) using dockeer we can execute our application anywhere
+in any platform without bothering about underlying infrstructure.
+
+K8's: Orchestration platform ( to manage docker containers)
+
+=====================================
+https://www.youtube.com/watch?v=qJ8gUp0O25k
+https://github.com/ValaxyTech/Simple-DevOps-Project/tree/master/SonarQube
+https://github.com/ashokitschool/maven-web-app
+
+CI/CD process:
+===========
+github--> jenkins(CI/CD)--> maven(Build), SonarQube(code reveiw), Nexus( to upload artifact), tomcat(deploy application)
+
+1. Maven: no need to install manually.
+2: git hub: https://github.com/ashokitschool/maven-web-app.git
+3. Tomcat : http://13.232.109.133:8080/
+4. SonarQube: 
+5. Nexus Repo:
+6: Jenkins :
+
+
+======
+tomcat:
+======
+tomcat server should install on /home/ec2-user path
+    
+Note:    yum list| grep jdk -- to find java versions or amazon-linux-extras list  ---will give you all pkg details
+
+Tom cat installation:
+==================
+	yum list | grep openjdk
+
+    4.1 first install java - sudo yum install -y java-1.8.0-openjdk-devel.x86_64
+    4.2 to goto tomcat url :https://tomcat.apache.org/download-90.cgi  --goto tomcat9 --> under core copy right click and then copylink this tar --> and execute in server - tar.gz (pgp, sha512)
+
+	sudo wget https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.75/bin/apache-tomcat-9.0.75.tar.gz
+    4.3 tar -xvf apache-tomcat-9.0.75.tar.gz
+	cd apache-tomcat-9.0.75
+ 	ls -lrt
+	chmod 777 webapps
+	cd webapps/manager/META-INF
+	vi context.xml
+	in this file remove Value line
+   4.4 after update go back to --  cd apache-tomcat-9.0.75
+	goto --> cd conf
+	open --> vi tomcat-users.xml  file and then goto last update rolenames
+
+	ex: 
+
+	<role rolename="manager-gui"/>
+	<role rolename="manager-script"/>
+	<role rolename="manager-jmx"/>
+	<role rolename="manager-status"/>
+	<user username="admin" password="admin" roles="manager-gui, manager-script, manager-jmx, manager-status"/>
+	<user username="deployer" password="deployer" roles="manager-script"/>
+	<user username="tomcat" password="s3cret" roles="manager-gui"/>
+
+or
+
+  <role rolename="manager-gui"/>
+            <role rolename="manager-script"/>
+<user username="tomcat" password="tomcat" roles=manager-gui,manager-script/>
+
+  4.5 now comeback to cd apache-tomcat-9.0.75 then goto cd bin
+	./startup.sh   --it will start tomcat
+
+  Now can login to tomcat web application using port and IP
+
+  ex: 
+  http://13.126.27.89:8080/
+once you login ..click on manager app buttion and then give login for username and password (tomcat and s3cret) --username and password
+
+tomcat with a password of s3cret
+
+Tomcat
+=====
+Deploy APP using tomcat with jenkins:
+managejenkins --> manage plugin --> avilibale --> search --> ssh-agent.
+ssh-agent plugin is copy the war file from jenkins server to tomcat server:
+
+2. Deploy to container  - install plugin on jenkins to deploy your application but this is for manual jenkins job.
+3. SSH Agent           --  install plugin on to run linux commands on jenkins using this plugin for pipeline automation -- to copy/deploy war files
+
+use ssh username with private key when creating pipeline syntax:
+sshagent
+add credentails:
+kind : username with private key
+ID : tomact server aganet(anyname)
+username : ec2-user
+private key ( copy pem file)
+
+click on generate piple line script
+
+we need source and target destination paths to move project.
+
+stage ('Tomcat deploy')
+        {
+      	sshagent(['tomcat-maven-agent-project1']) {
+    	sh 'scp -o StrictHostKeyChecking=no target/01-maven-web-app.war ec2-user@65.2.152.43:/home/ec2-user/tomcat/webapps'
+
+	}
+        }
+
+source : target/01-maven-web-app.war
+target mechine to tamcat:/home/ec2-user/tomcat/webapps 
+
+===========================================================================================================	
+
+Sonarqube: run on 2GB ram and t2.small only support
+=============================================================================================================
+https://www.youtube.com/watch?v=mSAcXagf1O0
+https://github.com/ValaxyTech/DevOpsDemos/blob/master/SonarQube/SonarQube_Installation.MD
+https://github.com/ravdy/DevOps/tree/master/sonarqube
+===================================================================
+
+Source: https://docs.sonarqube.org/latest/requirements/requirements/
+
+1.An EC2 instance with a minimum of 2 GB RAM (t2.small)
+2. Java installation
+
+sudo su -
+yum list | grep jdk
+yum install slf4j-jdk14.noarch -y
+
+3. SonarQube cannot be run as root on Unix-based systems, so create a dedicated user account for SonarQube if necessary.
+
+4.Installation steps
+Download SonarQube latest verions on to EC2 instace
+
+cd /opt
+sudo wget https://binaries.sonarsource.com/Distribution/sonarqube/sonarqube-9.9.1.69595.zip
+unzip sonarqube-9.9.1.69595.zip
+
+if its point to root user , create user as a sonaradmin for better understand and run on sonaradmin, otherwise it wont run.
+
+useradd sonaradmin
+id sonaradmin
+chown -R sonaradmin:sonaradmin sonarqube-9.9.1.69595
+cd sonarqube-9.9.1.69595
+pwd
+chmod -R 777 /opt/sonarqube-9.9.1.69595
+ls -lrta
+
+5. switch to sonaradmin now:  otherwise if you start sonar on root it will not up.
+	su - sonaradmin 
+	whoami
+
+go to cd /opt/sonarqube-9.9.1.69595/bin/linux-x86-64
+
+6. start now sonarqube using script ./sonar.sh start
+
+or systemctrl sonar start or service sonar start
+
+note sonarqube port number :9000
+
+take public ip from ec2 instance with port number to sonarquebe
+
+====to check status of sonarquebe is running or not
+./sonar.sh status
+
+7. Stop SonarQube server
+cd /opt/sonarqube-x.x/bin/linux-x86-64 
+./sonar.sh stop
+===============
+login password as sonarquebe username - admin and password admin -  as Chehan01*
+===============================
+how to integrate sonarqube to jenkins:
+============================================
+1.go to manage jenkins --> manage plugins --> avilible --> SonarQube Scanner plugin --> install the plugin
+
+2. login to sonar qube and generate sonar token and add it as secret text as global credentials.
+
+how to generate token : login to sonar qube --> go to myaccount --> security --> generate token
+
+token : sqa_32e93ce63e1c1f1124d1e98800f99e84df2f6a20
+
+3. managejenkins --> credentils or manage credentails --> in (global) --> add credentials
+
+select secret text --> in secret text --> give token details
+
+manage jenkins --> configure system --> sonar qube servers --> add sonar qube server.
+
+name: sonarserver 9.9.1
+server URL:http://3.108.65.142:9000/
+token : sqa_32e93ce63e1c1f1124d1e98800f99e84df2f6a20
+
+
+====================================
+Maven:
+
+managejenkins-->global tool configuration--> update here maven version 
+you dont need to install maven manually
+
+=========================
+Nexus:Nexus is one a artifact repository which helps to store your build outcomes.
+
+nexus should need t2.medium instance to comeup.
+
+==========================
+
+1. first install java.
+
+please note for nexus installtion java 17 version not supporting , plz try to install 8 or 11.
+
+sudo su -
+yum list | grep jdk
+yum install slf4j-jdk14.noarch -y
+or
+sudo yum install java-1.8.0  -y
+2.cd /opt
+sudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.qzsudo wget https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+tar -xvf latest-unix.tar.gz
+mv nexus-3.34.0-01 nexus
+cd nexus
+3. add user --> sudo adduser nexus
+set the password for nexus user: passwd nexus  ( done password also nexus)
+
+4. visudo   ---> add in this file below content (swift g goto last line)
+
+ctrl x and then y and then press enter  --> it will save your changes.
+
+nexus ALL=(ALL)  ALL  and then save it.
+5. sudo chown -R nexus:nexus /opt/nexus
+   sudo chown -R nexus:nexus /opt/sonatype-work
+
+ls -lrta
+
+6. ------>open /opt/nexus/bin/nexus.rc file uncommnet run_as_user paramenter 
+and set it as following
+
+vi /opt/nexus/bin/nexus.rc
+
+run_as_user="nexus" (file shold have only this line)
+
+7. Add nexus as a service at boot time
+
+sudo ln -s /opt/nexus/bin/nexus /etc/init.d/nexus
+
+8.Login as a nexus user and start service
+
+su - nexus
+whoami
+service nexus start
+serivce nexus status
+
+Login nexus server from browser on port 8081
+
+http://13.233.201.185:8081
+
+Use default credentials to login
+
+username : admin
+password : admin123
+
+or to see password:
+[nexus@ip-172-31-11-120 nexus3]$ pwd
+/opt/sonatype-work/nexus3
+[nexus@ip-172-31-11-120 nexus3]$
+
+[nexus@ip-172-31-11-120 nexus3]$ cat admin.password
+cd3c868b-8707-4059-ac88-8cf1466c3426[nexus@ip-172-31-11-120 nexus3]$
+
+username: admin and below is password:
+e672cceb-66c2-4938-8079-d503104b00d1
+
+how to integrate jenkins with nexus:
+====================
+managejenkins --> manage plugin --> avilibale --> search --> nexus artifact uploader.
+
+using pipleline script you can use nexus artifact uploader
+
+nexus version: nexus3
+protocol : http
+nexus URL : http://52.66.248.193:8081/
+credentials: username and password as admin and admin
+group Id : in.ashokit (anything we can give)
+version : 1.0-SNAPSHOT (this is the info we are giving to store)
+repository : Maven-web-nexusserver (name should be where you created name in nexus repository server)
+
+Artifacts:
+
+ArtifactId: is a project name and you can find in pom.xml (01-maven-web-app)
+type :  war -->artifact type is either war or jar (in this war as project is web application)
+classifier: yuo can leave blank
+file : target/01-maven-web-app.war (here you should give war file location)
+
+then click geneare pipeline syntax:
+
+syntax shoud be like this:
+nexusArtifactUploader artifacts: [[artifactId: '01-maven-web-app', classifier: '', file: 'target/01-maven-web-app.war', type: 'war']], credentialsId: 'Nexus credentails', groupId: 'in.ashokit', nexusUrl:'52.66.248.193:8081', nexusVersion: 'nexus3', protocol: 'http', repository:'Maven-web-nexusserver', version: '1.0-SNAPSHOT'
+
+note:if you get authentication failure error , please make sure use password credentails correct.
+
+
+===================
+
+Jenkins:
+==================
+JAVA JDK download: https://www.oracle.com/java/technologies/downloads/#java8-windows
+
+Jenkins setup:
+
+
+Launch Aws instance through connect:then 
+
+go to jenkis io url and then click on redhat 
+
+https://pkg.jenkins.io/redhat-stable/
+
+copy jenkins repositry and paste on Ec2 server to execute: 
+sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+
+output on Ec2:
+
+https://aws.amazon.com/amazon-linux-2/
+[ec2-user@ip-10-0-0-244 ~]$ sudo wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
+--2022-03-27 06:13:39--  https://pkg.jenkins.io/redhat-stable/jenkins.repo
+Resolving pkg.jenkins.io (pkg.jenkins.io)... 151.101.154.133, 2a04:4e42:24::645
+Connecting to pkg.jenkins.io (pkg.jenkins.io)|151.101.154.133|:443... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 85
+Saving to: ‘/etc/yum.repos.d/jenkins.repo’
+
+100%[================================================================================>] 85          --.-K/s   in 0s      
+
+2022-03-27 06:13:39 (2.57 MB/s) - ‘/etc/yum.repos.d/jenkins.repo’ saved [85/85]
+
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+======================================================================
+2. copy jenkins key and execute on ec2 : sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+
+Output:
+
+[ec2-user@ip-10-0-0-244 ~]$ sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+[ec2-user@ip-10-0-0-244 ~]$ 
+
+==================================================
+
+3. install now for extra pkg for enterprise linux:
+
+sudo amazon-linux-extras install epel -y
+
+4. now install Standered Java version :
+
+sudo yum install java-1.8.0-openjdk -y
+
+5. Now install git:
+
+sudo yum install git -y
+
+6. now install jenkins:
+
+sudo yum install jenkins -y
+
+
+git --version
+mvn --version
+jenkins --version
+
+9. now start jenkins :
+
+sudo systemctl restart jenkins
+sudo systemctl status jenkins
+
+10: now go to Ec2 instach take Public ip and add to ip port number in browser.
+
+public ip:8080
+ex: 15.207.85.199:8080
+
+11. now copy this path in unlick jenkins URL: /var/lib/jenkins/secrets/initialAdminPassword
+
+[ec2-user@ip-10-0-0-244 /]$ sudo cat /var/lib/jenkins/secrets/initialAdminPassword
+e0d550b215e644b482d8e8373e20aba2  --password for jenkins:
+
+[ec2-user@ip-10-0-0-244 /]$ 
+
+12. now it will turn to Customize jenkins screen..here you need to intall all suggested plugins
+
+click on suggested plugins , it will install all suggested plugins.
+
+13. Create First Admin User
+
+user name: admin
+Password: Chehan01*
+full name: chehan chunduri
+email: chunduriramakrishna.b@gmail.com
+
+Now jenkis is ready:
+
+=====================
+https://www.youtube.com/watch?v=qJ8gUp0O25k
+
+pipeline script:
+
+node {
+    
+    stage ('clone repo')
+        {
+             git credentialsId: '51625b1a-e4ff-4226-ad5e-ba0dbcec3e96', url: 'https://github.com/25893018/maven-web-app.git'
+        }
+    
+    stage ('Maven Clean Build')
+        {
+        def mavenHome = tool name:"Maven-3.9.1", type:"maven"
+        def mavenCMD = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} clean package"
+        }
+
+	stage ('Sonar code Review')
+        {
+ 	withSonarQubeEnv('Sonar - Version 9.9.1')
+	{ 	
+        def mavenHome = tool name:"Maven-3.9.1", type:"maven"
+        def mavenCMD = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} sonar:sonar"
+        }
+	}
+
+	stage ('Nexus Artifact upload')
+        {
+      
+	nexusArtifactUploader artifacts: [[artifactId: '01-maven-web-app', classifier: '', file: 'target/01-maven-web-app.war', type: 'war']], credentialsId: 'Nexus credentails', groupId: 'in.ashokit', nexusUrl: '52.66.248.193:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven-web-nexusserver', version: '1.0-SNAPSHOT'
+
+        }
+
+	
+sshagent(['Tomcat-server-Agent']) {
+     	sh 'scp -o StrictHostKeyChecking=no target/01-maven-web-app.war ec2-user@65.2.152.43:/home/ec2-user/tomcat/webapps'
+
+	}
+        }
+
+source : target/01-maven-web-app.war
+target mechine to tamcat:/home/ec2-user/tomcat/webapps 
+}
+}
+=================================================================================
+
+
+node {
+    
+    stage ('clone repo')
+        {
+             git credentialsId: '51625b1a-e4ff-4226-ad5e-ba0dbcec3e96', url: 'https://github.com/25893018/maven-web-app.git'
+        }
+        
+        stage ('Maven Clean Build')
+        {
+        def mavenHome = tool name:"Maven-3.9.1", type:"maven"
+        def mavenCMD = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} clean package"
+        }
+
+        stage ('Sonar code Review')
+        {
+ 	withSonarQubeEnv('Sonar - Version 9.9.1')
+	{ 	
+        def mavenHome = tool name:"Maven-3.9.1", type:"maven"
+        def mavenCMD = "${mavenHome}/bin/mvn"
+        sh "${mavenCMD} sonar:sonar"
+        }
+	}
+	
+	stage ('Nexus Artifact upload')
+        {
+      
+        nexusArtifactUploader artifacts: [[artifactId: '01-maven-web-app', classifier: '', file: 'target/01-maven-web-app.war', type: 'war']], credentialsId: 'NEXUSCredi', groupId: 'Ashokit', nexusUrl: '52.66.248.193:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'Maven-web-nexusserver', version: '1.0-SNAPSHOT'
+        }
+
+    stage ('Tomcat deploy')
+        {
+      	sshagent(['tomcat-maven-agent-project1']) {
+    	sh 'scp -o StrictHostKeyChecking=no target/01-maven-web-app.war ec2-user@65.2.152.43:/home/ec2-user/tomcat/webapps'
+
+	}
+        }
+    
+}
