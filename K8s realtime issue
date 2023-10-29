@@ -42,7 +42,7 @@ $ kubectl run nginx or kubectl run nginxpod --imagename =nginx
    
  ===== vs declarative ( through manifest/yaml)
   
-     kubectl create/apply -f .\pod.yaml
+     kubectl create/apply -f pod.yaml
      
 ======To Delete Pod=============
 kubectl delete pod nginxpod
@@ -88,7 +88,7 @@ generic: it creats a screts in local file/directory
 kubectl create secret generic my-secret --from-file=ssh-privatekey=/root/.ssh/id_rsa --from-literal =passphrase=password
 kubectl get secret my-secret -o yaml
 
-to decode password:
+to decode passwo  rd:
 echo -n 'password' | base64   --> base64 is api to decode credentials
 echo amfp | base64 -d   -> -d means decode password
 
@@ -147,7 +147,7 @@ replicat set is nothing but a you can create number of pods
 example: replicat set =3 means it will create 3 pods at a time with that mentioned image.
 *****deployment have two types of methods to create/update versions:
 recreate --> in this method we have down time to recreate pods. you need to bring down the pods to bring up another version pods. 
-so there is a down time here.
+so there is a down   time here.
 ========
 rollingout  --> in this method it will not down all pods at a time insted first pod will be down and then version will be update.
 =========
@@ -356,7 +356,7 @@ pods will create/manage using deployments(deployment.yaml)
 services will manage deployments
 using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable 
 name in yaml file, then when do deployment automatically services will connect to app/pods.
- 
+  ``WU  
 kubectl get nodes
 kubectl get pods --all-namespaces | grep -i calico   -> to check calico network namespace running or not
 
