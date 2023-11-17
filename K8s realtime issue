@@ -155,6 +155,16 @@ again second pod will be down and then version will be update
 again third pod will be down and then version will be update.......;
 
 default will be in k8's rollingout method apply.
+
+desired state - the state of the pods which is desired
+curret state - the actual state of pods which are running
+
+Desired =3 
+current =3 
+if any pod is down /not working current state count will change.
+
+kubectl delete pod podname
+
 kubectl create -f nginxdeploy.yml   --> this is initial creation 
 kubectl get deployment.apps/nginxdeploy
 
@@ -162,6 +172,7 @@ kubectl apply -f nginxdeploy.yml    --> this command is for when you are updatin
 or down pods
 kubectl delete -f nginxdeploy.yml
 kubectl get deployment.apps/nginxdeploy
+kubectl get replicaset or Kubectl get rs
 kubectl get pods
 
 kubectl set image deployment/nginix nginx=nginx:latest  --> to move alphine version to latest version 
@@ -354,9 +365,84 @@ networking:
 default ip will be 172.17.0.1 when pod is created it will be automatically allowcated
 pods will create/manage using deployments(deployment.yaml)
 services will manage deployments
-using labels services will connect to deployments/pods. if you want to connect particaluar application, you can mention as lable 
-name in yaml file, then when do deployment automatically services will connect to app/pods.
-  ``WU  
+
+****Labels are key value pairs that are attachd to objects, such as Pods.
+==========
+using labels services will connect to deployments/pods. if you want to connect particaluar application, 
+you can mention as lable name in yaml file, then when do deployment automatically services will connect to app/pods.
+
+Step 1: Create 3 PODS
+kubectl run pod-1 --image=nginx
+kubectl run pod-2 --image=nginx 
+kubectl run pod-3 --image=nginx 
+
+or
+how to create different env teams in production using lables
+============================================================
+
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=admin.
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=db.
+kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=dev.
+
+Step 2: Show Labels of POD
+kubectl get pods --show-labels
+
+Step 3: Label PODS
+kubectl label pod pod-1 env=dev
+     kubectl label pod pod-2 env=stage
+kubectl label pod pod-3 env=prod
+kubectl get pods --show-labels
+
+kubectl get pods --show-labels
+kubectl get prod -l 'team in (admin,dev)' env=prod --show-labels   --> it will show env=prod teams 
+
+kubectl label pods backend env-    --> to remove prod enviornment label(env=prod)
+Step 4: Use Selectors to Filter PODS
+kubectl get pods -l env=dev
+kubectl get pods -l env=dev
+kubectl get pods -l env!=dev
+
+Step 5: Check Available Example using Help command
+kubectl label --help
+
+Step 6: Remove Label of POD from DEV environement
+kubectl label pod pod-1 env-
+kubectl get pods --show-labels
+
+Step 7: Generate POD Manifest to See Location of Labels
+kubectl run nginx --image=nginx --dry-run=client -o yaml
+
+Step 8: Add a new Label in POD Manifest
+kubectl run nginx --image=nginx --dry-run=client -o yaml > label-pod.yaml
+Add a new label of "env=dev" in metadata.labels.
+
+Final output of file
+
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: nginx
+    env: dev
+  name: nginx
+spec:
+  containers:
+  - image: nginx
+    name: nginx
+    resources: {}
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
+kubectl apply -f label-pod.yaml
+kubectl get pods --show-labels
+
+Step 9: Add Label to ALL PODS
+kubectl label pods --all status=running
+kubectl get pods --show-labels
+Step 10: Delete All the PODS
+kubectl delete pods --all
+
 kubectl get nodes
 kubectl get pods --all-namespaces | grep -i calico   -> to check calico network namespace running or not
 
@@ -586,8 +672,10 @@ docker ps | grep -i ingress   --> to see ingress controller running or not
 kubectl get deployments
 minikube ip
 
-rollout of deploymets:
+rollout of deploymets: we can easily rollout new updates to our applications using deployments
 =======================
+deployments will perform update in rollout manner to esure that your app is not down.
+
 kubectl create deployment my-app --image=nginx --dry-run -o yaml > nginx-deployment.yaml  -> it wll create nginx pod  
 and also create yaml file to see content in file.
 
@@ -595,29 +683,38 @@ kubectl run -f nginx-deployment.yaml
 kubectl get deployment
 kubectl get pods
 
+
 kubectl scale deployment my-app --replicas =5  to scaleup the pods 
-kubectl set image deployment my-app nginx=nginx:latest   --old vesion to latest update
+kubectl set image deployment my-app nginx=nginx:latest   --old vesion to latest update   
+or 
+kubectl set image deployment my-app nginx=nginx:1.9.1 --record
+      
 kubectl rollout history deployment  --to see hiso=tory of deployment and then if yu want to see revisions or old versions use below commands.
 
 kubectl rollout history deployment my-app --revision=1
 kubectl rollout history deployment my-app --revision=2
 
+Kubernetes cheat sheet for commands:
+==============
+https://kubernetes.io/docs/reference/kubectl/cheatsheet/
+
+rollback deployments:
+==============
 kubectl rollout undo deployments my-app --to-revision=1   ---to move latest to older version or earlier version
+kubectl describe deployment pod name
 kubectl scale deployment my-app --replicas =2 --> to scale down the pods
+
+creating deployment using CLI:
+===================
+
+kubect create deployment --help
+Kubectl create deployment mydeploy --image=nginx
+
+Kubectl create deployment mydeploy --image=nginx --replicas=3 
+Kubectl create deployment mydeploy --image=nginx --replicas=3 --dry-run=client -o yaml
 
 kubectl get pods
 
-how to create different env teams in production using lables
-============================================================
-
-kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=admin.
-kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=db.
-kubectl run frontend --image=nginx --restart=Never --labels=env=prod team=dev.
-
-kubectl get pods --show-labels
-kubectl get prod -l 'team in (admin,dev)' env=prod --show-labels   --> it will show env=prod teams 
-
-kubectl label pods backend env-    --> to remove prod enviornment label(env=prod)
 
 annotations:--if you want to contact any team we will mention in annotations as a team name
 ===========
