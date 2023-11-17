@@ -92,6 +92,40 @@ to decode passwo  rd:
 echo -n 'password' | base64   --> base64 is api to decode credentials
 echo amfp | base64 -d   -> -d means decode password
 
+Node selector:
+=========
+node selector allows us to add a constraint about running a pods in a specific worker node.
+
+for multiple reasons, there can be a need to run a pod on a specific worker node.
+node affinity is a set of rules used by the schduler to determine where a pod can be placed.
+===========
+in k8's terms it is referred as node selector and node affinity/pod affinity fileds under podspec.
+node selector and node affinity similar , but affinity more flexible compared to selector.
+
+
+use-case:
+APP A requires faster dis in order to be able to run efficeiently
+Run APP A in nodes which has SSD
+
+to acheive this 
+step1 : add a label to your nodes depending on there disk type
+disk1 =hdd
+disk2 = ssd
+disk3 =hdd
+
+kubectl describe nodes nodename --> to see lable names
+kubectl label node nodename disk1=hdd
+kubectl label node nodename disk2=SSD
+kubectl label node nodename disk1=hdd
+ubectl describe nodes nodename  --> to verify lables
+
+
+step2: create a nnode selector configuration to und pods only on nodes which has lablel of dis =ssd
+
+in yaml file , you need to add 
+nodeSelector:
+  disk: ssd
+
 
 
 commands:
