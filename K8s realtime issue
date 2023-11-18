@@ -92,6 +92,7 @@ to decode passwo  rd:
 echo -n 'password' | base64   --> base64 is api to decode credentials
 echo amfp | base64 -d   -> -d means decode password
 
+
 Node selector:
 =========
 node selector allows us to add a constraint about running a pods in a specific worker node.
@@ -99,7 +100,7 @@ node selector allows us to add a constraint about running a pods in a specific w
 for multiple reasons, there can be a need to run a pod on a specific worker node.
 node affinity is a set of rules used by the schduler to determine where a pod can be placed.
 ===========
-in k8's terms it is referred as node selector and node affinity/pod affinity fileds under podspec.
+     in k8's terms it is referred as node selector and node affinity/pod affinity fileds under podspec.
 node selector and node affinity similar , but affinity more flexible compared to selector.
 
 
@@ -126,6 +127,24 @@ in yaml file , you need to add
 nodeSelector:
   disk: ssd
 
+requests and limits:
+===================
+
+requests and limits are two ways in which we can control the amount of resources that can be assigned to a pod
+resources like cpu and memory)
+
+or
+kubernetes schedule decides the ideal node to run the pod depending on the requests and limits.
+
+if your pod requires 8GB of RAM however theer are no nodes within your cluster which has 8GB RAM, then your Pod 
+never get schduled.
+
+Kindly note your schduler schdule pods based on requests.
+request : guaranteed to get
+Limits : make sure that container does not take node resources abve a specific value
+
+guaranteed memory : request(250 mb)
+maxmimum memory : Limit(500 MB)
 
 
 commands:
