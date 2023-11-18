@@ -1,0 +1,363 @@
+K8's Services:
+=============
+
+why we want use services:
+
+Usecase1: suppose you have frontend and backend application pods.
+
+Frontend application always try to connect to backed to implement logic/retrive data, after a while suppose
+if backend pod was down and up , automatically IP address will change and it wont work for front end application
+as we have still old ip in front end application. to avoid this we can go for services.
+
+Usecase2:
+
+suppose you have frontend and backend gateway and application pods.
+
+Frontend application always try to connect to backed gateway to implement logic/retrive data, and then backend gateway
+will route to pods as pods are associated with backend gateway and get data.but when we scaleup backend gateway pods, it is difficult to update ip addresses in frontend
+
+suppose pods are incresed to 5 to 50 , so you have to update 50 ip addresses in froentend. its very difficult and also if it is 
+scaleup more, so to avoid this we can go for services.
+
+here  backend gateway act as a service( which can provide single IP addres ad DNS through which pods can be acccessed.)
+
+in simple terms --> service is a gateway that distributes the incoming traffic between its endpoints
+Endpoints are the underlying PODS(backend pods ) to which the traffic wil be routed to.
+                (service)
+frontend  --> backend gateway -- PODS(backend pods or endpoints)
+
+***************simple example for froend/service/backend pods ***********************8
+========================
+
+Documentation Referred:
+https://kubernetes.io/docs/concepts/services-networking/service/
+
+Step 1: Creating Backend PODS
+kubectl run backend-pod-1 --image=nginx
+kubectl run backend-pod-2 --image=nginx
+
+Step 2: Creating Frontend PODS
+kubectl run frontend-pod --image=ubuntu --command -- sleep 3600
+
+Step 3: Test the Connection between Frontend and Backend PODs
+kubectl get pods -o wide
+kubectl exec -it frontend-pod -- bash
+apt-get update && apt-get -y install curl
+curl <BACKEND-POD-1-IP>
+
+Step 4: Create a new Service
+ vi service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+   name: kplabs-service
+spec:
+   ports:
+   - port: 8080
+     targetPort: 80
+kubectl apply -f service.yaml
+kubectl get service
+kubectl describe service kplabs-service
+
+*****Kindly note port will listen to service -8080 and targetport will listen to backend port - 80(it means backend pods)
+
+Step 5: Associate Endpoints with Service
+vi endpoint.yaml
+apiVersion: v1
+kind: Endpoints
+metadata:
+  name: kplabs-service
+subsets:
+  - addresses:
+      - ip: 10.244.0.23
+    ports:
+      - port: 80
+kubectl apply -f endpoint.yaml
+
+Step 6: Test the Connection
+
+kubectl exec -it frontend-pod -- bash
+curl <SERVICE-IP:8080>
+
+Step 7: Delete the Created Resources
+kubectl delete service kplabs-service
+kubectl delete endpoints kplabs-service
+kubectl delete pod backend-pod-1
+kubectl delete pod backend-pod-2
+kubectl delete pod frontend-pod
+
+==================================
+kubectl get pods -o wide
+kubectl exec -it pod name curl localhost
+kubectl exec -it frontend pod name curl backednip  --> this means frontend applcation connect to backend application
+
+Kubectl get service
+kubectl get sv
+
+to check service connected to backend pods
+kubectl describe  service nginx  --> in endpoints row you can see all ip's have (those are backedn pods) that are running on web applications/any other apps
+
+kubectl exec -it frontend pod name curl serviceIP  --> this means frontend applcation connect to backend application via service application gateway IP.
+
+
+there are several types of k8's services which are aviliable:
+==============================================
+NodePort
+ClusterIP
+LoadBalancer
+INgress.
+
+ClusterIP :-whenever service type is clusterIP, an internal cluster IP address is assigned to the service
+since an internal cluster IP is assigned , it can only be reachable with in the cluster.
+
+this is default service type. if any service type is not mentional explicitly , then K8's will take defaulty clusterIP.
+
+kubectl get service
+
+****challanges with Manual approach for Endpoints:
+===================================
+
+at this stage we are manually defining the IP address of the pods in endpoints
+if there are 500 PODS, we will have to manullly define ech ip in endpoint and its very difficult
+to avoid this K8's allow " integration of service with selectors"
+
+kubernetes allows us to define the list of labels of PODS that needs to be added as part of Endpoints.
+all PODS that matches that label will be added automatically.
+
+DEMO:
+
+Step 1: Creating Deployments
+
+nano demo-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  labels:
+    app: nginx
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.14.2
+        ports:
+        - containerPort: 80
+kubectl apply -f demo-deployment.yaml
+
+kubectl get pods --show-lables
+
+Step 2: Creating Service
+nano service-selector.yaml
+apiVersion: v1
+kind: Service
+metadata:
+   name: kplabs-service-selector
+spec:
+   selector:
+     app: nginx
+   ports:
+   - port: 80
+     targetPort: 80
+kubectl apply -f service-selector.yaml
+
+Step 3: Verify Endpoints in Service
+kubectl describe service kplabs-service-selector
+
+Step 4: Scale Deployments
+kubectl scale deployment/nginx-deployment --replicas=10
+
+Step 5: Verify Endpoints in Service
+kubectl describe service kplabs-service-selector
+
+suppose if you want to see all Ip's
+kubectl get endpoints
+kubectl describe endpoints endpointer name  --> it ill show you all IP addresses
+
+
+Step 6: Create a New Manual POD and Add a Label
+kubectl run manual-pod --image=nginx
+
+kubectl label pods manual-pod app=nginx
+
+Step 7: Verify Endpoints in Service
+kubectl describe service kplabs-service-selector
+kubectl describe endpoints kplabs-service-selector
+
+Step 8: Delete Created Resources
+kubectl delete service kplabs-service-selector
+kubectl delete -f demo-deployment.yaml
+kubectl delete pod manual-pod
+==========================================================================================================
+
+Service type - NodePort
+===========================================================================================================
+Nodeport exposes the service on each node's IP at a static port(NodePort)
+
+you will be able to cotact the  NodePort service, frm outsdie the cluser, by reqeusting 
+<workerIP>:<NodePort>
+if servicetype is NodePort, then K8's will allowcate a port(default 30000 to 32767) on every worker node
+
+https://github.com/25893018/certified-kubernetes-administrator/blob/master/Domain%203%20-%20Services%20and%20Networking/nodeport.md
+
+Step 1: Create Sample POD with Label
+kubectl run nodeport-pod --labels="type=publicpod" --image=nginx
+kubectl get pods --show-labels
+
+Step 2: Create NodePort service
+nano nodeport.yaml
+apiVersion: v1
+kind: Service
+metadata:
+   name: kplabs-nodeport
+spec:
+   selector:
+     type: publicpod
+   type: NodePort
+   ports:
+   - port: 80
+     targetPort: 80
+kubectl apply -f nodeport.yaml
+
+Step 3: Verify NodePort
+kubectl get service
+
+Step 4: Fetch the Worker Node Public IP
+kubectl get nodes -o wide
+Copy the Public IP /Exteral-IP of Worker Node and Paste it in browser along with NodePort
+
+public IP:nodeport to see in URL wether app is working or not
+
+Step 5: Delete the Resources
+kubectl delete pod nodeport-pod
+kubectl delete -f nodeport.yaml
+
+challenges with nodeport:
+=========================
+we need to access it via IP:nodeport
+
+example: if google using nodeport for his appliaction to launch, then we should use URL like
+
+google.com:31514
+
+customer may lot of urls/websites and they dont want to remember nodeport numbers and may also sometimes nodeport 
+numbers will change, so to avoid these type of issues we can go for load balancieer
+
+
+================================================================================================================================
+
+Service type - Load balancer
+
+https://github.com/25893018/certified-kubernetes-administrator/blob/master/Domain%203%20-%20Services%20and%20Networking/loadbalancer.md
+====================================================================================================================
+load balancer service type will automaticaly deploy an external load balancer.
+this load balancer takes care of routing requests to the underlying service
+
+client----------->google.com-->loadbalancer--->31514(nodeport)---->service--->POD
+
+Step 1: Create Sample POD with Label
+=====
+kubectl run lb-pod --labels="type=loadbalanced" --image=nginx
+kubectl get pods --show-labels
+
+Step 2: Create LoadBalancer service
+====
+nano elb-service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: kplabs-loadbalancer
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    protocol: TCP
+  selector:
+    type: loadbalanced
+kubectl apply -f elb-service.yaml
+Step 3: Verify Service Logs
+===
+kubectl describe service kplabs-loadbalancer
+
+Step 4: Delete the Resources
+kubectl delete pod lb-pod
+kubectl delete -f elb-service.yaml
+
+===========================================================================================================
+
+Generating service manifest- using CLI
+kubectl expose help
+=========================================================================================================
+create a manifest file for service and add POD in its endpoints
+
+Pre-Requisite Step 1: Create a new POD with name nginx
+kubectl run nginx --image=nginx
+Pre-Requisite Step 2: Create a New Deployment
+nano service-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kplabs-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      tier: frontend
+  template:
+    metadata:
+      labels:
+        tier: frontend
+    spec:
+      containers:
+      - name: nginx
+        image: nginx
+kubectl apply -f service-deployment.yaml
+Step 1: Generate Service Manifest - POD
+kubectl expose pod nginx --name nginx-service --port=80 --target-port=80 --dry-run=client -o yaml
+
+kubectl expose pod nginx --name nginx-service --port=80 --target-port=80 --dry-run=client -o yaml > service-01.yaml
+
+kubectl describe service nginx-svc
+Step 2: Generate NodePort Service Manifest - POD
+kubectl expose pod nginx --name nginx-nodeport-service --port=80 --target-port=80 --type=NodePort --dry-run=client -o yaml
+
+kubectl get service
+Step 3: Generate Service Manifest - Deployment
+kubectl expose deployment kplabs-deployment --name nginx-deployment-service --port=80 --target-port=8000
+
+kubectl describe service nginx-deployment-service
+Step 4: Delete Resources
+kubectl delete pod nginx
+kubectl delete deployment kplabs-deployment
+kubectl delete service nginx-service
+kubectl delete service nginx-nodeport-service
+kubectl delete service nginx-deployment-service
+
+========================================================================================================================================
+Challanges with typical load baancer Deployment
+============================================================================================
+
+whenver making use of Load balacer service type , out of box, you can make use of single website
+
+if you want to manage multiple webisites within your k8's cluster you should have create multiple Load balancers to manager
+multiple applications.this will be huge cost and cannot manage, to avoid this we have ingress service
+
+
+
+
+
+
+
+
+
+
+
+
+
