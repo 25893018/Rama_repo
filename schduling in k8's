@@ -54,15 +54,55 @@ containers:
   nodeSelector
   podAffnity/anti-Affinity
   node affinity and Anti Affinity
-  Node taints and Pod Tolrations
-  
-  
-  Adv Pod schduling with node affinity and Anti Affinity
-  
+
+----Node taints and Pod Tolration
+  =====================
   understanding Node Taints and Pod Tolrations 
+
+Taints are used to repel the pods from a specific nodes
+
+simple use case : support if you have taint on node1 , then if you are schdule any pod to the node1, then it wont goto 
+node1 and it will block if try to run pod on node1.
+
+eventhough if you want to run your pod on taint worker node1, 
+then inorder to enter the taint worker node , you need a special pass.
+this pass is called toleration.
+
+also if worker node2 not applied tainted, then it will go and run pod on node2. normally
+
+kubectl describe node nodename
+kubectl taint nodes nodename  key=value:NoSchdule
+kubectl taint nodes kubeadm-worker-01 key=value:NoSchedule
+
+kubectl describe node kubeadm-worker-01
+
+kubectl run nginx --image=nginx
+
+kubectl describe node nodename  --> now you can see taint applied on speceifc node
+
+kubectl run nginx --image=nginx --replicas=5  --> here all pods created on node2 insted node1 because node1 tainted
+kubectl get pods
+
+Tolerations:
+ - key: "key"
+ operator: "Exists"
+ effect: "NoSchdule"
+
+***** if you want to remove taint on specific node , you can use below command.
+
+kubectl taint nodes kubeadm-worker-01 key=value:NoSchedule-
+kubectl describe node nodename  --check whether taint removed or untainted are not
   understanding INIT- containers
   understanding of DaemonSets
-  
+====================
+Daemonsets are used to run pods on each node.
+
+simple usecase:
+suppose if you want to isntall antiviurs on your nodes, you can use deamonset to run pods on each node
+
+also if any node newly created , deamon set automatically antivirus pod will create and run on new node as well.
+
+
    first check
    kubectl get nodes 
    kubectl run nginx --image nginx --check now where it is creating/which node
