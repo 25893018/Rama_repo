@@ -92,10 +92,41 @@ Tolerations:
 
 kubectl taint nodes kubeadm-worker-01 key=value:NoSchedule-
 kubectl describe node nodename  --check whether taint removed or untainted are not
+
+component of Taint and Tolerations:
+============================
+key = key is any string upto 253 characters
+value = the value is any string upto 63 characters
+effect: NoSchdule
+         PreferNoSchdule
+         NoExecute
+operator: Equal
+          Exist
+    
+NoSchdule: new pods that do not match the tainit are not schduled oto that node
+Existing pods on the node remain same
+
+PreferNoSchdule:new pods that do nto match the taint mght be schduled on to that ode, but the schdular
+tries not to
+
+NoExecute: New Pods that do not match the tainit cannot be scheduled onto that node
+
+existing pods on the node that do not have a matching toleration are removed.
+
+Equal : the key/value/effect parameters must match. this is default.
+Exists: the key/effect parameters must match. you must leave a blank alue parameter which matches any.
+
+Adopter containeers:
+adapter pattern is generally used to transform th application output to standardize/normalize it for aggregation
+
+simple use case for logs will be in order
+
+
+
   understanding INIT- containers
   understanding of DaemonSets
 ====================
-Daemonsets are used to run pods on each node.
+Daemonsets are used to run each one pod on every node.
 
 simple usecase:
 suppose if you want to isntall antiviurs on your nodes, you can use deamonset to run pods on each node
