@@ -344,13 +344,20 @@ kubectl delete service nginx-deployment-service
 Challanges with typical load baancer Deployment
 ============================================================================================
 
-whenver making use of Load balacer service type , out of box, you can make use of single website
+whenver making use of Load balacer service type , out of box, you can make use of single website using load balacer
 
-if you want to manage multiple webisites within your k8's cluster you should have create multiple Load balancers to manager
-multiple applications.this will be huge cost and cannot manage, to avoid this we have ingress service
+if you want to manage multiple webisites within your k8's cluster you should have create multiple Load balancers to manage
+multiple applications/URLs.this will be huge cost and cannot manage, to avoid this we have ingress service
 
+Ingress flow:
+=========
+client---->example.com--->load balancer ---->Gateway(ingress)---> Service --> POD
 
+usecases:
+ client-->google.com--> loadbalancer-->gateway(ingress)--> exampleservice --> pod
+                                               --->    flipkartservice--> pod
 
+ingress gateway it will route/manage multiple URLS and route traffic to particualr pods
 
 
 
